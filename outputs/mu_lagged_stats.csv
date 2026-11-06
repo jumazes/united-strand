@@ -1,0 +1,4 @@
+stat,lag,n,r_with_surprise,p_value
+totalCrosses,mean of previous 5 matches,101,-0.0243595331142964,0.8089359703046112
+shotsOnTarget,mean of previous 5 matches,101,-0.06839930829486773,0.49672938998361005
+wonCorners,mean of previous 5 matches,101,-0.0610942423407896,0.5439077388605585

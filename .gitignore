@@ -1,0 +1,21 @@
+# Raw downloads: large, and download.py can fetch them again
+data/raw/
+
+# Generated copy of the page; docs/index.html is the site
+demo/haircut.html
+
+# Course assignment text: not ours to publish
+*.txt
+!requirements.txt
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

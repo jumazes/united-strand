@@ -1,0 +1,830 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>*{box-sizing:border-box}body{margin:0;font:14px system-ui,sans-serif}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>When Will Frank Get a Haircut?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alumni+Sans:wght@500;700;800&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a barbershop ticket. A thin pole stripe opens the page, the calculator is the working centre,
+   and the barber-pole colours double as the data palette: blue win, grey draw, red loss. */
+:root {
+  --bg: #EDF2F7; --surface: #FFFFFF; --ink: #101B33; --ink-2: #47536A; --ink-3: #657085;
+  --line: #D7DFE9; --line-strong: #B9C4D2; --wash: #E3EAF2;
+  --win: #1F5FBF; --draw: #7D8494; --loss: #D8352A; --pole-white: #FFFFFF;
+  --display: "Alumni Sans", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "Golos Text", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0E1524; --surface: #162033; --ink: #EEF2F8; --ink-2: #B4BECE; --ink-3: #8F9AAD;
+  --line: #2A364C; --line-strong: #3D4A62; --wash: #1E2A40;
+  --win: #4C8BE8; --draw: #667084; --loss: #E8564A; --pole-white: #E8EDF4; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0E1524; --surface: #162033; --ink: #EEF2F8; --ink-2: #B4BECE; --ink-3: #8F9AAD;
+  --line: #2A364C; --line-strong: #3D4A62; --wash: #1E2A40;
+  --win: #4C8BE8; --draw: #667084; --loss: #E8564A; --pole-white: #E8EDF4; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 400 16px/1.55 var(--body); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.stripe { height: 10px; background: repeating-linear-gradient(115deg, var(--loss) 0 22px, var(--pole-white) 22px 44px, var(--win) 44px 66px, var(--pole-white) 66px 88px); }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0; }
+section { padding-block: 44px; border-top: 1px solid var(--line); }
+header { padding-block: 40px 32px; }
+.eyebrow { font: 500 12px/1.4 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 12px; }
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+h1 { font: 800 clamp(60px, 11vw, 124px)/.88 var(--display); letter-spacing: -.005em; }
+h2 { font: 700 clamp(38px, 5.2vw, 56px)/1 var(--display); margin-bottom: 12px; }
+h3 { font: 600 17px/1.35 var(--body); }
+p { margin: 0; }
+.lede { font-size: 18px; max-width: 62ch; color: var(--ink-2); margin-top: 18px; }
+.section-lede { max-width: 66ch; color: var(--ink-2); margin-bottom: 26px; }
+.muted { color: var(--ink-3); font-size: 13.5px; line-height: 1.5; }
+
+.facts { display: flex; flex-wrap: wrap; gap: 14px 44px; margin-top: 26px; }
+.fact b { display: block; font: 700 46px/1 var(--display); }
+.fact span { color: var(--ink-3); font-size: 13.5px; }
+
+.chart { position: relative; touch-action: pan-y; }
+.chart:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--win); outline-offset: 2px; border-radius: 4px; }
+svg { display: block; width: 100%; overflow: visible; }
+svg text { font: 400 11.5px var(--body); fill: var(--ink-3); font-variant-numeric: tabular-nums; }
+svg text.strong { fill: var(--ink); font-weight: 600; font-size: 12.5px; }
+.tip { position: absolute; z-index: 5; pointer-events: none; background: var(--ink); color: var(--bg); padding: 8px 11px; border-radius: 6px; font-size: 13px; line-height: 1.35; max-width: 250px; width: max-content; }
+.tip b { display: block; font-weight: 600; font-size: 14px; }
+.tip span { display: block; opacity: .82; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--ink-2); margin-top: 10px; }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+.legend i.ln { height: 2px; width: 16px; border-radius: 2px; vertical-align: 3px; }
+details { margin-top: 12px; font-size: 14px; }
+summary { cursor: pointer; color: var(--ink-2); font-size: 13.5px; width: fit-content; }
+.scroll { overflow-x: auto; margin-top: 8px; max-height: 340px; overflow-y: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+th { text-align: left; font-weight: 500; color: var(--ink-3); font-size: 12.5px; border-bottom: 1px solid var(--line-strong); padding: 6px 10px 6px 0; white-space: nowrap; }
+td { border-bottom: 1px solid var(--line); padding: 7px 10px 7px 0; vertical-align: middle; }
+
+.calc { display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: 20px; align-items: start; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; min-width: 0; }
+.result { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 18px; }
+.pole { position: relative; width: 52px; height: 238px; border-radius: 26px; overflow: hidden; background: var(--wash); border: 3px solid var(--ink); }
+.pole-fill { position: absolute; inset: auto 0 0; height: 20%; overflow: hidden; transition: height .35s ease; }
+.pole-fill::before { content: ""; position: absolute; left: -40px; right: -40px; bottom: -120px; top: -400px; background: repeating-linear-gradient(135deg, var(--loss) 0 16px, var(--pole-white) 16px 32px, var(--win) 32px 48px, var(--pole-white) 48px 64px); animation: spin 6s linear infinite; }
+@keyframes spin { to { transform: translateY(90.5px); } }
+.pole-tick { position: absolute; left: 0; right: 0; height: 2px; background: var(--ink); opacity: .35; }
+@media (prefers-reduced-motion: reduce) { .pole-fill::before { animation: none; } .pole-fill { transition: none; } }
+.big { font: 800 clamp(84px, 11vw, 112px)/.86 var(--display); }
+.big-sub { font-weight: 500; margin-top: 8px; line-height: 1.35; }
+.delta { font: 500 12.5px/1.4 var(--mono); color: var(--ink-3); margin-top: 8px; min-height: 18px; }
+.streak { font-size: 13.5px; color: var(--ink-2); margin-top: 12px; }
+.streak b { color: var(--ink); }
+.controls { display: grid; gap: 16px; margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); }
+.ctl-label { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; font-weight: 500; font-size: 14px; }
+.ctl-label output { font: 500 14px var(--mono); }
+input[type=range] { width: 100%; accent-color: var(--win); margin: 8px 0 6px; height: 24px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+.chip { background: transparent; border: 1px solid var(--line-strong); border-radius: 999px; padding: 4px 11px; font-size: 13px; }
+.chip:hover { background: var(--wash); }
+.chip[aria-pressed=true] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.check { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 8px; font-size: 14px; line-height: 1.35; cursor: pointer; }
+.check input { width: 17px; height: 17px; accent-color: var(--win); margin: 1px 0 0; }
+.check small { display: block; color: var(--ink-3); font-size: 12.5px; margin-top: 2px; }
+.reset { background: transparent; border: 0; padding: 0; font-size: 13.5px; color: var(--ink-2); text-decoration: underline; text-underline-offset: 3px; width: fit-content; }
+.window { background: var(--wash); border-radius: 8px; padding: 12px 14px; margin-top: 16px; font-size: 14.5px; }
+.window b { font-weight: 600; }
+
+.fixtures-wrap { margin-top: 20px; }
+.sticky { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 4; background: var(--surface); display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; justify-content: space-between; padding: 12px 20px; border-bottom: 1px solid var(--line-strong); border-radius: 10px 10px 0 0; }
+.sticky h3 { font-size: 15.5px; }
+.sticky .live { font: 500 13.5px var(--mono); }
+.fixture { display: grid; grid-template-columns: 74px minmax(120px, 1.25fr) minmax(90px, 1.5fr) 64px 122px; gap: 12px; align-items: center; padding: 9px 20px; border-bottom: 1px solid var(--line); font-size: 14px; }
+.fixture:last-child { border-bottom: 0; }
+.fixture.head { font-size: 12px; color: var(--ink-3); padding-block: 8px; }
+.fixture .date { font: 400 13px var(--mono); color: var(--ink-2); }
+.fixture .opp { font-weight: 500; line-height: 1.25; min-width: 0; }
+.fixture .opp small { display: block; font-weight: 400; color: var(--ink-3); font-size: 12px; }
+.fixture .end { font: 400 13px var(--mono); text-align: right; color: var(--ink-2); }
+.seg { display: flex; gap: 2px; height: 8px; }
+.seg i { display: block; height: 100%; min-width: 2px; }
+.seg i:first-child { border-radius: 4px 0 0 4px; }
+.seg i:last-child { border-radius: 0 4px 4px 0; }
+.pw { font-size: 12px; color: var(--ink-3); margin-top: 3px; font-variant-numeric: tabular-nums; }
+.whatif { display: flex; gap: 2px; justify-content: flex-end; }
+.whatif button { width: 36px; height: 30px; background: transparent; border: 1px solid var(--line-strong); font-size: 13px; font-weight: 500; }
+.whatif button:first-child { border-radius: 6px 0 0 6px; }
+.whatif button:last-child { border-radius: 0 6px 6px 0; }
+.whatif button:hover { background: var(--wash); }
+.whatif button[aria-pressed=true][data-r=W] { background: var(--win); border-color: var(--win); color: #fff; }
+.whatif button[aria-pressed=true][data-r=D] { background: var(--draw); border-color: var(--draw); color: #fff; }
+.whatif button[aria-pressed=true][data-r=L] { background: var(--loss); border-color: var(--loss); color: #fff; }
+.more { display: block; width: 100%; background: transparent; border: 0; border-top: 1px solid var(--line); padding: 11px; font-size: 14px; color: var(--ink-2); border-radius: 0 0 10px 10px; }
+.more:hover { background: var(--wash); }
+
+.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.claim { font: 700 clamp(32px, 4vw, 42px)/1.02 var(--display); margin-bottom: 10px; }
+.ending { display: grid; grid-template-columns: 96px minmax(0, 1fr) auto; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 14px; align-items: center; }
+.ending:last-child { border: 0; }
+.tag { display: inline-flex; gap: 6px; align-items: center; font-size: 13px; color: var(--ink-2); }
+.tag i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.recs { display: grid; gap: 0; }
+.rec { display: grid; grid-template-columns: 54px minmax(0, 1fr); gap: 6px 16px; padding: 18px 0; border-top: 1px solid var(--line); }
+.rec:first-child { border-top: 0; padding-top: 0; }
+.rec-n { font: 800 52px/.85 var(--display); color: var(--ink-3); }
+.rec p { color: var(--ink-2); margin-top: 4px; max-width: 70ch; }
+.dont { margin-top: 20px; background: var(--wash); border-radius: 8px; padding: 16px 18px; }
+.dont p { color: var(--ink-2); margin-top: 4px; font-size: 15px; }
+.traps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 28px; margin-top: 26px; }
+.trap p { color: var(--ink-2); font-size: 14.5px; margin-top: 3px; }
+footer { border-top: 1px solid var(--line); padding-block: 26px 40px; color: var(--ink-3); font-size: 13.5px; }
+.model-row-book td { font-weight: 600; }
+.model-row-chosen td { background: var(--wash); }
+
+@media (max-width: 860px) {
+  .calc, .two, .traps { grid-template-columns: minmax(0, 1fr); }
+  .fixture { grid-template-columns: 58px minmax(0, 1fr) 116px; padding-inline: 14px; }
+  .fixture .bar-cell { grid-column: 1 / -1; grid-row: 2; }
+  .fixture .end, .fixture.head { display: none; }
+  .whatif button { width: 34px; }
+  .sticky { padding-inline: 14px; }
+}
+</style>
+
+<div class="stripe" aria-hidden="true"></div>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">The United Strand · data to 6 November 2026</p>
+    <h1>When will Frank get a haircut?</h1>
+    <p class="lede">Since 5 October 2024, blogger Frank Ilett has refused to cut his hair until Manchester United win five competitive matches in a row. We built a model that estimates the chance of that run and shows what stands in its way.</p>
+    <div class="facts">
+      <div class="fact"><b data-t="days"></b><span>days without a haircut</span></div>
+      <div class="fact"><b data-t="n"></b><span>competitive matches</span></div>
+      <div class="fact"><b>4</b><span>longest winning run</span></div>
+    </div>
+    <div class="chart" id="strip" tabindex="0" role="img" aria-label="Results of every match in the challenge, in order. Left and right arrow keys step through the matches." style="margin-top:28px"></div>
+    <div class="legend">
+      <span><i style="background:var(--win)"></i>win, bar up</span>
+      <span><i style="background:var(--draw)"></i>draw, short mark</span>
+      <span><i style="background:var(--loss)"></i>loss, bar down</span>
+    </div>
+    <details><summary>All matches as a table</summary><div class="scroll" id="strip-table"></div></details>
+  </header>
+
+  <section id="calculator">
+    <h2>The haircut calculator</h2>
+    <p class="section-lede">Your browser plays out the rest of the season 20,000 times using the trained model's coefficients. Change United's strength or set match results, and the chance updates.</p>
+    <div class="calc">
+      <div class="panel">
+        <div class="result">
+          <div class="pole" id="pole" aria-hidden="true"><div class="pole-fill" id="pole-fill"></div><div class="pole-tick" style="bottom:20%"></div><div class="pole-tick" style="bottom:40%"></div><div class="pole-tick" style="bottom:60%"></div><div class="pole-tick" style="bottom:80%"></div></div>
+          <div style="min-width:0" aria-live="polite">
+            <div class="big" id="big">…</div>
+            <p class="big-sub" id="big-sub"></p>
+            <p class="delta" id="delta"></p>
+            <p class="streak" id="streak"></p>
+          </div>
+        </div>
+        <div class="controls">
+          <div>
+            <div class="ctl-label"><label for="elo">United's strength, Elo rating</label><output id="elo-out" for="elo"></output></div>
+            <input type="range" id="elo" min="1550" max="1950" step="1">
+            <div class="chips" id="presets"></div>
+            <p class="muted" id="mean-win" style="margin-top:8px"></p>
+          </div>
+          <label class="check"><input type="checkbox" id="weak"><span>Keep the shortfall against weaker sides<small id="weak-note"></small></span></label>
+          <label class="check"><input type="checkbox" id="cups"><span>Add three cup matches<small>The FA Cup and UCL play-offs are not on the calendar yet. Dates and opponents here are assumptions.</small></span></label>
+          <label class="check"><input type="checkbox" id="update" checked><span>Update the rating during the season<small>After each match United's rating rises or falls, as real Elo does.</small></span></label>
+          <button class="reset" id="reset" type="button">Back to the base forecast</button>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Chance the haircut has happened by each date</h3>
+        <div class="chart" id="curve" tabindex="0" role="img" aria-label="Cumulative probability of a haircut by date. Left and right arrow keys step through the matches." style="margin-top:12px"></div>
+        <div class="legend" id="curve-legend" hidden>
+          <span><i class="ln" style="background:var(--win)"></i>your scenario</span>
+          <span><i class="ln" style="background:var(--draw)"></i>base forecast</span>
+        </div>
+        <div class="window" id="window"></div>
+      </div>
+    </div>
+    <div class="panel fixtures-wrap" style="padding:0">
+      <div class="sticky"><h3>Fixtures and what-if results</h3><span class="live" id="live"></span></div>
+      <div class="fixture head"><span>Date</span><span>Opponent</span><span>Win, draw, loss</span><span class="end">Run ends here</span><span style="text-align:right">What if</span></div>
+      <div id="fixtures"></div>
+      <button class="more" id="more" type="button"></button>
+    </div>
+  </section>
+
+  <section>
+    <h2>What stands in the way</h2>
+    <p class="section-lede">We first tested the simplest explanation: United might be playing below their level. The totals say otherwise.</p>
+    <div class="two">
+      <div class="panel">
+        <p class="claim">There is no curse: <span data-t="wins"></span> wins against <span data-t="exp_wins"></span> expected</p>
+        <p style="color:var(--ink-2)">At these probabilities, the chance of seeing no run in <span data-t="n"></span> matches is <b data-t="no_run"></b>. The data shows no separate momentum either: after a run of wins, teams win about as often as the model predicts.</p>
+      </div>
+      <div class="panel">
+        <p class="claim">The even total hides two different Uniteds</p>
+        <p style="color:var(--ink-2)">Against stronger sides they win <b data-t="strong_a"></b> of matches where the model expects <span data-t="strong_e"></span>, a gap larger than at any of <span data-t="strong_clubs"></span> other clubs. Against weaker sides they win <b data-t="weak_a"></b> where it expects <span data-t="weak_e"></span>. A run of five almost always has to go through weaker sides.</p>
+      </div>
+    </div>
+    <div class="two" style="margin-top:20px;align-items:start">
+      <div class="panel">
+        <h3>United's win rate: actual and expected</h3>
+        <div class="chart" id="bars" style="margin-top:12px"></div>
+        <div class="legend"><span><i style="background:var(--win);border-radius:50%"></i>actual</span><span><i style="background:var(--draw);border-radius:50%"></i>model expectation</span></div>
+        <p class="muted" style="margin-top:10px">Samples are small and we made many comparisons. Only the effect against stronger sides stands out reliably.</p>
+      </div>
+      <div class="panel">
+        <h3>How runs of two or more wins ended</h3>
+        <div id="endings" style="margin-top:8px"></div>
+        <p class="muted" id="endings-note" style="margin-top:10px"></p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What the coaches should test</h2>
+    <p class="section-lede">The order follows the strength of the evidence. These are hypotheses to try on the pitch: our data shows associations, and only an experiment can confirm causes.</p>
+    <div class="recs">
+      <div class="rec"><div class="rec-n">1</div><div><h3>Shot quality away to weaker sides</h3><p>In these Premier League matches, United's <span data-t="shots_mu"></span> shots produce <span data-t="xg_mu"></span> xG, while other clubs' <span data-t="shots_lg"></span> shots produce <span data-t="xg_lg"></span> xG. That is <span data-t="xgs_mu"></span> xG per shot against <span data-t="xgs_lg"></span>. Test the game plan against a low block. Sample: <span data-t="q_n"></span> matches.</p></div></div>
+      <div class="rec"><div class="rec-n">2</div><div><h3>Defending</h3><p>Opponents' xG rose from <span data-t="xga_old"></span> to <span data-t="xga_new"></span> per match, while United's own fell from <span data-t="xg_old"></span> to <span data-t="xg_new"></span>. Defending accounts for two thirds of the drop in xG difference. Current-season sample: <span data-t="games_new"></span> league matches.</p></div></div>
+      <div class="rec"><div class="rec-n">3</div><div><h3>Rotation on short rest</h3><p>With three days' rest or fewer, United win <span data-t="rest_a"></span> of matches where the model expects <span data-t="rest_e"></span>. The effect is not statistically significant, so treat it as something to monitor.</p></div></div>
+    </div>
+    <div class="dont">
+      <h3>What this data does not support changing</h3>
+      <p>Crossing. United win more often in matches with fewer crosses (r = <span data-t="cross_r"></span>), but crosses in previous matches show no link (r = <span data-t="cross_lag"></span>). A team that is losing probably just crosses more. Recent finishing does not improve the forecast either.</p>
+    </div>
+    <p style="margin-top:20px;max-width:70ch">The target is hard. Even at United's best rating of the challenge (<span data-t="peak"></span>, now <span data-t="now"></span>), the chance of a run by the end of the season is about <b id="at-peak"></b>. A 50% chance needs a rating near <b id="for-half"></b>, close to Manchester City (<span data-t="city"></span>).</p>
+  </section>
+
+  <section>
+    <h2>Why you can trust this</h2>
+    <p class="section-lede">The model trained on past seasons only and was tested on the seasons that followed: <span data-t="test_matches"></span> matches since 2019/20. When points sit on the diagonal, the promised percentages come true.</p>
+    <div class="two">
+      <div class="panel">
+        <h3>Win probability for a single match</h3>
+        <div class="chart" id="calib" style="margin-top:12px"></div>
+        <details><summary>Table</summary><div class="scroll" id="calib-table"></div></details>
+      </div>
+      <div class="panel">
+        <h3>Forecast of a five-win run, made on 6 November</h3>
+        <div class="chart" id="backtest" style="margin-top:12px"></div>
+        <p class="muted" style="margin-top:10px"><span data-t="backtests"></span> team-seasons from the top five leagues. Brier score (lower is better): model <span data-t="brier_model"></span>, win rate so far <span data-t="brier_simple"></span>, constant rate <span data-t="brier_const"></span>. Above 40% the points sit over the diagonal, so the forecast runs low for strong teams.</p>
+        <details><summary>Table</summary><div class="scroll" id="backtest-table"></div></details>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:20px">
+      <h3>Model comparison on future seasons</h3>
+      <div class="scroll" id="models" style="max-height:none"></div>
+      <p class="muted" style="margin-top:10px">Lower log loss is better. Bet365 beats our model, probably because bookmakers see line-ups and injuries. Our model also covers cups and European matches, where full odds are missing, and it stays simple enough to explain. The more complex variants added almost nothing.</p>
+    </div>
+    <div class="traps">
+      <div class="trap"><h3>Data leakage</h3><p>The pre-match rating uses past matches only. The backtest starts on 6 November and sees no later results, though it does know the future calendar, including cup ties.</p></div>
+      <div class="trap"><h3>Selection bias</h3><p>We chose United precisely because the run has not happened. So we tested the anomaly against every club over the same period.</p></div>
+      <div class="trap"><h3>Correlation and causation</h3><p>The link with crossing vanished when tested on previous matches. The other indicators deserve the same caution.</p></div>
+      <div class="trap"><h3>Different leagues</h3><p>Elo places clubs on one scale through European matches. Second divisions are not in the data, so ratings of promoted clubs are approximate.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    Data: Transfermarkt datasets (CC0), football-data.co.uk, the Fantasy-Premier-League archive, the unofficial ESPN API. A shootout win counts as a draw, and a win after extra time counts as a win. The forecast describes probabilities and guarantees nothing. Not affiliated with the club or the blog's author.
+    <br><br>
+    Lab work for the AI Essentials course, Astana IT University, group AAI-2606M: Aslan Zhumazhanov, Alikhan Khamidulla, Zhandarbek Zhetpissov, Aman Nurgozhiyev.
+  </footer>
+</div>
+
+<script>
+const D = {"snapshot": "2026-11-06", "model": {"mean": [-4.049714992253236, 0.0030995366671992333, 0.15111040102252757, 0.14746764658891195, 7.431059274644512, 7.308324013420674], "scale": [160.45960350579983, 0.05558713465945083, 0.358156457048227, 0.3545714875711804, 4.007195199771281, 3.9267863595338106], "coef": [[0.5358552309379088, -0.01013913636574307, 0.06482713510783764, 0.03397874299466988, -0.05127625237556521, 0.007522806821889462], [0.00890701745079181, -0.009129488044719119, -0.1769112251661068, -0.044994949870110296, 0.0024071631174079327, -0.002924995734863913], [-0.5447622483887004, 0.019268624410462107, 0.11208409005826939, 0.011016206875440498, 0.048869089258157264, -0.004597811087025522]], "intercept": [0.3239702439584589, -0.258150624049619, -0.06581961990878545]}, "elo": {"k": 20, "home_adv": 40, "gbar": 1.2531274964051766, "now": 1642.676202762821, "peak": 1735.6927772900788, "city": 1835.8504292617636}, "start_streak": 1, "fixtures": [{"date": "2026-11-08", "label": "Aston Villa", "comp": "Premier League", "assumed": false, "opp_elo": 1721.831642618143, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 5, "rest_opp": 5}, {"date": "2026-11-22", "label": "Liverpool", "comp": "Premier League", "assumed": false, "opp_elo": 1742.2780684068587, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 14, "rest_opp": 14}, {"date": "2026-11-25", "label": "Sporting", "comp": "Champions League", "assumed": false, "opp_elo": 1756.4655165214897, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 1, "rest_team": 3, "rest_opp": 4}, {"date": "2026-11-28", "label": "Brentford", "comp": "Premier League", "assumed": false, "opp_elo": 1676.149195122721, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 3, "rest_opp": 5}, {"date": "2026-12-02", "label": "Newcastle", "comp": "Premier League", "assumed": false, "opp_elo": 1626.6077138061412, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 4, "rest_opp": 3}, {"date": "2026-12-05", "label": "Coventry", "comp": "Premier League", "assumed": false, "opp_elo": 1534.343239134012, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 3, "rest_opp": 4}, {"date": "2026-12-08", "label": "RB Leipzig", "comp": "Champions League", "assumed": false, "opp_elo": 1663.3205899032694, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 1, "rest_team": 3, "rest_opp": 3}, {"date": "2026-12-13", "label": "Crystal Palace", "comp": "Premier League", "assumed": false, "opp_elo": 1599.5795743754773, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 5, "rest_opp": 3}, {"date": "2026-12-20", "label": "Arsenal", "comp": "Premier League", "assumed": false, "opp_elo": 1888.611793199571, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 7, "rest_opp": 7}, {"date": "2026-12-27", "label": "Nott'm Forest", "comp": "Premier League", "assumed": false, "opp_elo": 1595.2903407624297, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 7, "rest_opp": 7}, {"date": "2026-12-30", "label": "Sunderland", "comp": "Premier League", "assumed": false, "opp_elo": 1554.821942717775, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 3, "rest_opp": 4}, {"date": "2027-01-02", "label": "Brighton", "comp": "Premier League", "assumed": false, "opp_elo": 1752.25502900683, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 3, "rest_opp": 4}, {"date": "2027-01-07", "label": "Newcastle", "comp": "Premier League", "assumed": false, "opp_elo": 1626.6077138061412, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 5, "rest_opp": 4}, {"date": "2027-01-16", "label": "Aston Villa", "comp": "Premier League", "assumed": false, "opp_elo": 1721.831642618143, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 9, "rest_opp": 11}, {"date": "2027-01-20", "label": "Bayern", "comp": "Champions League", "assumed": false, "opp_elo": 1930.1244605658273, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 1, "rest_team": 4, "rest_opp": 4}, {"date": "2027-01-23", "label": "Liverpool", "comp": "Premier League", "assumed": false, "opp_elo": 1742.2780684068587, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 3, "rest_opp": 4}, {"date": "2027-01-27", "label": "Villarreal", "comp": "Champions League", "assumed": false, "opp_elo": 1614.766347338537, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 1, "rest_team": 4, "rest_opp": 3}, {"date": "2027-01-30", "label": "Brentford", "comp": "Premier League", "assumed": false, "opp_elo": 1676.149195122721, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 3, "rest_opp": 7}, {"date": "2027-02-06", "label": "Chelsea", "comp": "Premier League", "assumed": false, "opp_elo": 1697.1017344403506, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 7, "rest_opp": 7}, {"date": "2027-02-10", "label": "Brighton", "comp": "Premier League", "assumed": false, "opp_elo": 1752.25502900683, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 4, "rest_opp": 4}, {"date": "2027-02-20", "label": "Nott'm Forest", "comp": "Premier League", "assumed": false, "opp_elo": 1595.2903407624297, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 10, "rest_opp": 10}, {"date": "2027-02-27", "label": "Arsenal", "comp": "Premier League", "assumed": false, "opp_elo": 1888.611793199571, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 7, "rest_opp": 7}, {"date": "2027-03-03", "label": "Sunderland", "comp": "Premier League", "assumed": false, "opp_elo": 1554.821942717775, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 4, "rest_opp": 4}, {"date": "2027-03-13", "label": "Everton", "comp": "Premier League", "assumed": false, "opp_elo": 1644.6156443124764, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 10, "rest_opp": 10}, {"date": "2027-03-20", "label": "Man City", "comp": "Premier League", "assumed": false, "opp_elo": 1835.8504292617636, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 7, "rest_opp": 7}, {"date": "2027-04-10", "label": "Hull", "comp": "Premier League", "assumed": false, "opp_elo": 1508.6018783919192, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 14, "rest_opp": 14}, {"date": "2027-04-17", "label": "Ipswich", "comp": "Premier League", "assumed": false, "opp_elo": 1527.4961223386383, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 7, "rest_opp": 7}, {"date": "2027-04-24", "label": "Crystal Palace", "comp": "Premier League", "assumed": false, "opp_elo": 1599.5795743754773, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 7, "rest_opp": 7}, {"date": "2027-05-01", "label": "Coventry", "comp": "Premier League", "assumed": false, "opp_elo": 1534.343239134012, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 7, "rest_opp": 7}, {"date": "2027-05-08", "label": "Bournemouth", "comp": "Premier League", "assumed": false, "opp_elo": 1747.0011710018346, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 7, "rest_opp": 7}, {"date": "2027-05-15", "label": "Leeds", "comp": "Premier League", "assumed": false, "opp_elo": 1614.895628055739, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 7, "rest_opp": 7}, {"date": "2027-05-23", "label": "Tottenham", "comp": "Premier League", "assumed": false, "opp_elo": 1620.6142226569439, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 8, "rest_opp": 8}, {"date": "2027-05-30", "label": "Fulham", "comp": "Premier League", "assumed": false, "opp_elo": 1604.3026067506034, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 7, "rest_opp": 7}], "fixtures_cups": [{"date": "2026-11-08", "label": "Aston Villa", "comp": "Premier League", "assumed": false, "opp_elo": 1721.831642618143, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 5, "rest_opp": 5}, {"date": "2026-11-22", "label": "Liverpool", "comp": "Premier League", "assumed": false, "opp_elo": 1742.2780684068587, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 14, "rest_opp": 14}, {"date": "2026-11-25", "label": "Sporting", "comp": "Champions League", "assumed": false, "opp_elo": 1756.4655165214897, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 1, "rest_team": 3, "rest_opp": 4}, {"date": "2026-11-28", "label": "Brentford", "comp": "Premier League", "assumed": false, "opp_elo": 1676.149195122721, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 3, "rest_opp": 5}, {"date": "2026-12-02", "label": "Newcastle", "comp": "Premier League", "assumed": false, "opp_elo": 1626.6077138061412, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 4, "rest_opp": 3}, {"date": "2026-12-05", "label": "Coventry", "comp": "Premier League", "assumed": false, "opp_elo": 1534.343239134012, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 3, "rest_opp": 4}, {"date": "2026-12-08", "label": "RB Leipzig", "comp": "Champions League", "assumed": false, "opp_elo": 1663.3205899032694, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 1, "rest_team": 3, "rest_opp": 3}, {"date": "2026-12-13", "label": "Crystal Palace", "comp": "Premier League", "assumed": false, "opp_elo": 1599.5795743754773, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 5, "rest_opp": 3}, {"date": "2026-12-20", "label": "Arsenal", "comp": "Premier League", "assumed": false, "opp_elo": 1888.611793199571, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 7, "rest_opp": 7}, {"date": "2026-12-27", "label": "Nott'm Forest", "comp": "Premier League", "assumed": false, "opp_elo": 1595.2903407624297, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 7, "rest_opp": 7}, {"date": "2026-12-30", "label": "Sunderland", "comp": "Premier League", "assumed": false, "opp_elo": 1554.821942717775, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 3, "rest_opp": 4}, {"date": "2027-01-02", "label": "Brighton", "comp": "Premier League", "assumed": false, "opp_elo": 1752.25502900683, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 3, "rest_opp": 4}, {"date": "2027-01-07", "label": "Newcastle", "comp": "Premier League", "assumed": false, "opp_elo": 1626.6077138061412, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 5, "rest_opp": 4}, {"date": "2027-01-09", "label": "FA Cup third round", "comp": "assumed", "assumed": true, "opp_elo": 1500.0, "is_home": 1, "neutral": 0, "is_cup": 1, "is_europe": 0, "rest_team": 2, "rest_opp": 7}, {"date": "2027-01-16", "label": "Aston Villa", "comp": "Premier League", "assumed": false, "opp_elo": 1721.831642618143, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 7, "rest_opp": 11}, {"date": "2027-01-20", "label": "Bayern", "comp": "Champions League", "assumed": false, "opp_elo": 1930.1244605658273, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 1, "rest_team": 4, "rest_opp": 4}, {"date": "2027-01-23", "label": "Liverpool", "comp": "Premier League", "assumed": false, "opp_elo": 1742.2780684068587, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 3, "rest_opp": 4}, {"date": "2027-01-27", "label": "Villarreal", "comp": "Champions League", "assumed": false, "opp_elo": 1614.766347338537, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 1, "rest_team": 4, "rest_opp": 3}, {"date": "2027-01-30", "label": "Brentford", "comp": "Premier League", "assumed": false, "opp_elo": 1676.149195122721, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 3, "rest_opp": 7}, {"date": "2027-02-06", "label": "Chelsea", "comp": "Premier League", "assumed": false, "opp_elo": 1697.1017344403506, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 7, "rest_opp": 7}, {"date": "2027-02-10", "label": "Brighton", "comp": "Premier League", "assumed": false, "opp_elo": 1752.25502900683, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 4, "rest_opp": 4}, {"date": "2027-02-16", "label": "UCL play-off, leg 1", "comp": "assumed", "assumed": true, "opp_elo": 1700.0, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 1, "rest_team": 6, "rest_opp": 7}, {"date": "2027-02-20", "label": "Nott'm Forest", "comp": "Premier League", "assumed": false, "opp_elo": 1595.2903407624297, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 4, "rest_opp": 10}, {"date": "2027-02-23", "label": "UCL play-off, leg 2", "comp": "assumed", "assumed": true, "opp_elo": 1700.0, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 1, "rest_team": 3, "rest_opp": 7}, {"date": "2027-02-27", "label": "Arsenal", "comp": "Premier League", "assumed": false, "opp_elo": 1888.611793199571, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 4, "rest_opp": 7}, {"date": "2027-03-03", "label": "Sunderland", "comp": "Premier League", "assumed": false, "opp_elo": 1554.821942717775, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 4, "rest_opp": 4}, {"date": "2027-03-13", "label": "Everton", "comp": "Premier League", "assumed": false, "opp_elo": 1644.6156443124764, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 10, "rest_opp": 10}, {"date": "2027-03-20", "label": "Man City", "comp": "Premier League", "assumed": false, "opp_elo": 1835.8504292617636, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 7, "rest_opp": 7}, {"date": "2027-04-10", "label": "Hull", "comp": "Premier League", "assumed": false, "opp_elo": 1508.6018783919192, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 14, "rest_opp": 14}, {"date": "2027-04-17", "label": "Ipswich", "comp": "Premier League", "assumed": false, "opp_elo": 1527.4961223386383, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 7, "rest_opp": 7}, {"date": "2027-04-24", "label": "Crystal Palace", "comp": "Premier League", "assumed": false, "opp_elo": 1599.5795743754773, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 7, "rest_opp": 7}, {"date": "2027-05-01", "label": "Coventry", "comp": "Premier League", "assumed": false, "opp_elo": 1534.343239134012, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 7, "rest_opp": 7}, {"date": "2027-05-08", "label": "Bournemouth", "comp": "Premier League", "assumed": false, "opp_elo": 1747.0011710018346, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 7, "rest_opp": 7}, {"date": "2027-05-15", "label": "Leeds", "comp": "Premier League", "assumed": false, "opp_elo": 1614.895628055739, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 7, "rest_opp": 7}, {"date": "2027-05-23", "label": "Tottenham", "comp": "Premier League", "assumed": false, "opp_elo": 1620.6142226569439, "is_home": 0, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 8, "rest_opp": 8}, {"date": "2027-05-30", "label": "Fulham", "comp": "Premier League", "assumed": false, "opp_elo": 1604.3026067506034, "is_home": 1, "neutral": 0, "is_cup": 0, "is_europe": 0, "rest_team": 7, "rest_opp": 7}], "weak_ratio": 0.7632464574651057, "strip": [{"date": "2024-10-06", "opp": "Aston Villa", "venue": "away", "comp": "Premier League", "gf": 0, "ga": 0, "r": "D", "pens": false, "aet": false, "p": 0.2439678987378002, "manager": "ten Hag"}, {"date": "2024-10-19", "opp": "Brentford", "venue": "home", "comp": "Premier League", "gf": 2, "ga": 1, "r": "W", "pens": false, "aet": false, "p": 0.5278417729913306, "manager": "ten Hag"}, {"date": "2024-10-24", "opp": "Fenerbahce", "venue": "away", "comp": "Europa League", "gf": 1, "ga": 1, "r": "D", "pens": false, "aet": false, "p": 0.1906194321276327, "manager": "ten Hag"}, {"date": "2024-10-27", "opp": "West Ham", "venue": "away", "comp": "Premier League", "gf": 1, "ga": 2, "r": "L", "pens": false, "aet": false, "p": 0.3897919926248803, "manager": "ten Hag"}, {"date": "2024-10-30", "opp": "Leicester", "venue": "home", "comp": "League Cup", "gf": 5, "ga": 2, "r": "W", "pens": false, "aet": false, "p": 0.7066220365562628, "manager": "van Nistelrooy"}, {"date": "2024-11-03", "opp": "Chelsea", "venue": "home", "comp": "Premier League", "gf": 1, "ga": 1, "r": "D", "pens": false, "aet": false, "p": 0.3768644067308936, "manager": "van Nistelrooy"}, {"date": "2024-11-07", "opp": "PAOK", "venue": "home", "comp": "Europa League", "gf": 2, "ga": 0, "r": "W", "pens": false, "aet": false, "p": 0.5017640463731384, "manager": "van Nistelrooy"}, {"date": "2024-11-10", "opp": "Leicester", "venue": "home", "comp": "Premier League", "gf": 3, "ga": 0, "r": "W", "pens": false, "aet": false, "p": 0.6661113614658907, "manager": "van Nistelrooy"}, {"date": "2024-11-24", "opp": "Ipswich", "venue": "away", "comp": "Premier League", "gf": 1, "ga": 1, "r": "D", "pens": false, "aet": false, "p": 0.5778785630605742, "manager": "Amorim"}, {"date": "2024-11-28", "opp": "Bodo/Glimt", "venue": "home", "comp": "Europa League", "gf": 3, "ga": 2, "r": "W", "pens": false, "aet": false, "p": 0.5847088291456286, "manager": "Amorim"}, {"date": "2024-12-01", "opp": "Everton", "venue": "home", "comp": "Premier League", "gf": 4, "ga": 0, "r": "W", "pens": false, "aet": false, "p": 0.6280101621499456, "manager": "Amorim"}, {"date": "2024-12-04", "opp": "Arsenal", "venue": "away", "comp": "Premier League", "gf": 0, "ga": 2, "r": "L", "pens": false, "aet": false, "p": 0.1499031847387882, "manager": "Amorim"}, {"date": "2024-12-07", "opp": "Nott'm Forest", "venue": "home", "comp": "Premier League", "gf": 2, "ga": 3, "r": "L", "pens": false, "aet": false, "p": 0.6224854650344468, "manager": "Amorim"}, {"date": "2024-12-12", "opp": "Viktoria Plzen", "venue": "away", "comp": "Europa League", "gf": 2, "ga": 1, "r": "W", "pens": false, "aet": false, "p": 0.3015073524039957, "manager": "Amorim"}, {"date": "2024-12-15", "opp": "Man City", "venue": "away", "comp": "Premier League", "gf": 2, "ga": 1, "r": "W", "pens": false, "aet": false, "p": 0.1613496517064878, "manager": "Amorim"}, {"date": "2024-12-19", "opp": "Tottenham", "venue": "away", "comp": "League Cup", "gf": 3, "ga": 4, "r": "L", "pens": false, "aet": false, "p": 0.3635884142804205, "manager": "Amorim"}, {"date": "2024-12-22", "opp": "Bournemouth", "venue": "home", "comp": "Premier League", "gf": 0, "ga": 3, "r": "L", "pens": false, "aet": false, "p": 0.5668644441563921, "manager": "Amorim"}, {"date": "2024-12-26", "opp": "Wolves", "venue": "away", "comp": "Premier League", "gf": 0, "ga": 2, "r": "L", "pens": false, "aet": false, "p": 0.4704481395609595, "manager": "Amorim"}, {"date": "2024-12-30", "opp": "Newcastle", "venue": "home", "comp": "Premier League", "gf": 0, "ga": 2, "r": "L", "pens": false, "aet": false, "p": 0.4258290313241908, "manager": "Amorim"}, {"date": "2025-01-05", "opp": "Liverpool", "venue": "away", "comp": "Premier League", "gf": 2, "ga": 2, "r": "D", "pens": false, "aet": false, "p": 0.0784133948970321, "manager": "Amorim"}, {"date": "2025-01-12", "opp": "Arsenal", "venue": "away", "comp": "FA Cup", "gf": 1, "ga": 1, "r": "D", "pens": true, "aet": false, "p": 0.1331978753097212, "manager": "Amorim"}, {"date": "2025-01-16", "opp": "Southampton", "venue": "home", "comp": "Premier League", "gf": 3, "ga": 1, "r": "W", "pens": false, "aet": false, "p": 0.7151839643096789, "manager": "Amorim"}, {"date": "2025-01-19", "opp": "Brighton", "venue": "home", "comp": "Premier League", "gf": 1, "ga": 3, "r": "L", "pens": false, "aet": false, "p": 0.4861975838622575, "manager": "Amorim"}, {"date": "2025-01-23", "opp": "Rangers", "venue": "home", "comp": "Europa League", "gf": 2, "ga": 1, "r": "W", "pens": false, "aet": false, "p": 0.4049057783141827, "manager": "Amorim"}, {"date": "2025-01-26", "opp": "Fulham", "venue": "away", "comp": "Premier League", "gf": 1, "ga": 0, "r": "W", "pens": false, "aet": false, "p": 0.294122821795187, "manager": "Amorim"}, {"date": "2025-01-30", "opp": "FCSB", "venue": "away", "comp": "Europa League", "gf": 2, "ga": 0, "r": "W", "pens": false, "aet": false, "p": 0.3756873234251722, "manager": "Amorim"}, {"date": "2025-02-02", "opp": "Crystal Palace", "venue": "home", "comp": "Premier League", "gf": 0, "ga": 2, "r": "L", "pens": false, "aet": false, "p": 0.522329365028243, "manager": "Amorim"}, {"date": "2025-02-07", "opp": "Leicester", "venue": "home", "comp": "FA Cup", "gf": 2, "ga": 1, "r": "W", "pens": false, "aet": false, "p": 0.7459920810385879, "manager": "Amorim"}, {"date": "2025-02-16", "opp": "Tottenham", "venue": "away", "comp": "Premier League", "gf": 0, "ga": 1, "r": "L", "pens": false, "aet": false, "p": 0.2804141912898192, "manager": "Amorim"}, {"date": "2025-02-22", "opp": "Everton", "venue": "away", "comp": "Premier League", "gf": 2, "ga": 2, "r": "D", "pens": false, "aet": false, "p": 0.3376172664682168, "manager": "Amorim"}, {"date": "2025-02-26", "opp": "Ipswich", "venue": "home", "comp": "Premier League", "gf": 3, "ga": 2, "r": "W", "pens": false, "aet": false, "p": 0.6513586917707012, "manager": "Amorim"}, {"date": "2025-03-02", "opp": "Fulham", "venue": "home", "comp": "FA Cup", "gf": 1, "ga": 1, "r": "D", "pens": true, "aet": false, "p": 0.5189824355531786, "manager": "Amorim"}, {"date": "2025-03-06", "opp": "Real Sociedad", "venue": "away", "comp": "Europa League", "gf": 1, "ga": 1, "r": "D", "pens": false, "aet": false, "p": 0.2543033690843778, "manager": "Amorim"}, {"date": "2025-03-09", "opp": "Arsenal", "venue": "home", "comp": "Premier League", "gf": 1, "ga": 1, "r": "D", "pens": false, "aet": false, "p": 0.2130892635380112, "manager": "Amorim"}, {"date": "2025-03-13", "opp": "Real Sociedad", "venue": "home", "comp": "Europa League", "gf": 4, "ga": 1, "r": "W", "pens": false, "aet": false, "p": 0.4849996876908319, "manager": "Amorim"}, {"date": "2025-03-16", "opp": "Leicester", "venue": "away", "comp": "Premier League", "gf": 3, "ga": 0, "r": "W", "pens": false, "aet": false, "p": 0.5817012083765616, "manager": "Amorim"}, {"date": "2025-04-01", "opp": "Nott'm Forest", "venue": "away", "comp": "Premier League", "gf": 0, "ga": 1, "r": "L", "pens": false, "aet": false, "p": 0.2894530908374815, "manager": "Amorim"}, {"date": "2025-04-06", "opp": "Man City", "venue": "home", "comp": "Premier League", "gf": 0, "ga": 0, "r": "D", "pens": false, "aet": false, "p": 0.324572754580652, "manager": "Amorim"}, {"date": "2025-04-10", "opp": "Lyon", "venue": "away", "comp": "Europa League", "gf": 2, "ga": 2, "r": "D", "pens": false, "aet": false, "p": 0.2533080850897495, "manager": "Amorim"}, {"date": "2025-04-13", "opp": "Newcastle", "venue": "away", "comp": "Premier League", "gf": 1, "ga": 4, "r": "L", "pens": false, "aet": false, "p": 0.2580925223267326, "manager": "Amorim"}, {"date": "2025-04-17", "opp": "Lyon", "venue": "home", "comp": "Europa League", "gf": 5, "ga": 4, "r": "W", "pens": false, "aet": true, "p": 0.4262373503908098, "manager": "Amorim"}, {"date": "2025-04-20", "opp": "Wolves", "venue": "home", "comp": "Premier League", "gf": 0, "ga": 1, "r": "L", "pens": false, "aet": false, "p": 0.5490126711986032, "manager": "Amorim"}, {"date": "2025-04-27", "opp": "Bournemouth", "venue": "away", "comp": "Premier League", "gf": 1, "ga": 1, "r": "D", "pens": false, "aet": false, "p": 0.2985889035502783, "manager": "Amorim"}, {"date": "2025-05-01", "opp": "Athletic Bilbao", "venue": "away", "comp": "Europa League", "gf": 3, "ga": 0, "r": "W", "pens": false, "aet": false, "p": 0.2046339718417135, "manager": "Amorim"}, {"date": "2025-05-04", "opp": "Brentford", "venue": "away", "comp": "Premier League", "gf": 3, "ga": 4, "r": "L", "pens": false, "aet": false, "p": 0.3220979149888406, "manager": "Amorim"}, {"date": "2025-05-08", "opp": "Athletic Bilbao", "venue": "home", "comp": "Europa League", "gf": 4, "ga": 1, "r": "W", "pens": false, "aet": false, "p": 0.427420531682762, "manager": "Amorim"}, {"date": "2025-05-11", "opp": "West Ham", "venue": "home", "comp": "Premier League", "gf": 0, "ga": 2, "r": "L", "pens": false, "aet": false, "p": 0.6257438920689198, "manager": "Amorim"}, {"date": "2025-05-16", "opp": "Chelsea", "venue": "away", "comp": "Premier League", "gf": 0, "ga": 1, "r": "L", "pens": false, "aet": false, "p": 0.1941781223377095, "manager": "Amorim"}, {"date": "2025-05-21", "opp": "Tottenham", "venue": "away", "comp": "Europa League", "gf": 0, "ga": 1, "r": "L", "pens": false, "aet": false, "p": 0.4449140609046152, "manager": "Amorim"}, {"date": "2025-05-25", "opp": "Aston Villa", "venue": "home", "comp": "Premier League", "gf": 2, "ga": 0, "r": "W", "pens": false, "aet": false, "p": 0.3142123257091326, "manager": "Amorim"}, {"date": "2025-08-17", "opp": "Arsenal", "venue": "home", "comp": "Premier League", "gf": 0, "ga": 1, "r": "L", "pens": false, "aet": false, "p": 0.2222603228894875, "manager": "Amorim"}, {"date": "2025-08-24", "opp": "Fulham", "venue": "away", "comp": "Premier League", "gf": 1, "ga": 1, "r": "D", "pens": false, "aet": false, "p": 0.3308786326568256, "manager": "Amorim"}, {"date": "2025-08-27", "opp": "Grimsby", "venue": "away", "comp": "League Cup", "gf": 2, "ga": 2, "r": "D", "pens": true, "aet": false, "p": 0.5494234365920342, "manager": "Amorim"}, {"date": "2025-08-30", "opp": "Burnley", "venue": "home", "comp": "Premier League", "gf": 3, "ga": 2, "r": "W", "pens": false, "aet": false, "p": 0.6371760232844791, "manager": "Amorim"}, {"date": "2025-09-14", "opp": "Man City", "venue": "away", "comp": "Premier League", "gf": 0, "ga": 3, "r": "L", "pens": false, "aet": false, "p": 0.193740739162963, "manager": "Amorim"}, {"date": "2025-09-20", "opp": "Chelsea", "venue": "home", "comp": "Premier League", "gf": 2, "ga": 1, "r": "W", "pens": false, "aet": false, "p": 0.2702984766315323, "manager": "Amorim"}, {"date": "2025-09-27", "opp": "Brentford", "venue": "away", "comp": "Premier League", "gf": 1, "ga": 3, "r": "L", "pens": false, "aet": false, "p": 0.3201841557994472, "manager": "Amorim"}, {"date": "2025-10-04", "opp": "Sunderland", "venue": "home", "comp": "Premier League", "gf": 2, "ga": 0, "r": "W", "pens": false, "aet": false, "p": 0.5884342324389676, "manager": "Amorim"}, {"date": "2025-10-19", "opp": "Liverpool", "venue": "away", "comp": "Premier League", "gf": 2, "ga": 1, "r": "W", "pens": false, "aet": false, "p": 0.143062007077035, "manager": "Amorim"}, {"date": "2025-10-25", "opp": "Brighton", "venue": "home", "comp": "Premier League", "gf": 4, "ga": 2, "r": "W", "pens": false, "aet": false, "p": 0.3800771626174746, "manager": "Amorim"}, {"date": "2025-11-01", "opp": "Nott'm Forest", "venue": "away", "comp": "Premier League", "gf": 2, "ga": 2, "r": "D", "pens": false, "aet": false, "p": 0.4073068542451729, "manager": "Amorim"}, {"date": "2025-11-08", "opp": "Tottenham", "venue": "away", "comp": "Premier League", "gf": 2, "ga": 2, "r": "D", "pens": false, "aet": false, "p": 0.2594908052993562, "manager": "Amorim"}, {"date": "2025-11-24", "opp": "Everton", "venue": "home", "comp": "Premier League", "gf": 0, "ga": 1, "r": "L", "pens": false, "aet": false, "p": 0.4795316674670313, "manager": "Amorim"}, {"date": "2025-11-30", "opp": "Crystal Palace", "venue": "away", "comp": "Premier League", "gf": 2, "ga": 1, "r": "W", "pens": false, "aet": false, "p": 0.1815660039710609, "manager": "Amorim"}, {"date": "2025-12-04", "opp": "West Ham", "venue": "home", "comp": "Premier League", "gf": 1, "ga": 1, "r": "D", "pens": false, "aet": false, "p": 0.616992904982539, "manager": "Amorim"}, {"date": "2025-12-08", "opp": "Wolves", "venue": "away", "comp": "Premier League", "gf": 4, "ga": 1, "r": "W", "pens": false, "aet": false, "p": 0.4900702621465898, "manager": "Amorim"}, {"date": "2025-12-15", "opp": "Bournemouth", "venue": "home", "comp": "Premier League", "gf": 4, "ga": 4, "r": "D", "pens": false, "aet": false, "p": 0.5148299104068069, "manager": "Amorim"}, {"date": "2025-12-21", "opp": "Aston Villa", "venue": "away", "comp": "Premier League", "gf": 1, "ga": 2, "r": "L", "pens": false, "aet": false, "p": 0.1771941482046475, "manager": "Amorim"}, {"date": "2025-12-26", "opp": "Newcastle", "venue": "home", "comp": "Premier League", "gf": 1, "ga": 0, "r": "W", "pens": false, "aet": false, "p": 0.3879391496195833, "manager": "Amorim"}, {"date": "2025-12-30", "opp": "Wolves", "venue": "home", "comp": "Premier League", "gf": 1, "ga": 1, "r": "D", "pens": false, "aet": false, "p": 0.6918660842048248, "manager": "Amorim"}, {"date": "2026-01-04", "opp": "Leeds", "venue": "away", "comp": "Premier League", "gf": 1, "ga": 1, "r": "D", "pens": false, "aet": false, "p": 0.4297794882533202, "manager": "Amorim"}, {"date": "2026-01-07", "opp": "Burnley", "venue": "away", "comp": "Premier League", "gf": 2, "ga": 2, "r": "D", "pens": false, "aet": false, "p": 0.5432064491453851, "manager": "Fletcher"}, {"date": "2026-01-11", "opp": "Brighton", "venue": "home", "comp": "FA Cup", "gf": 1, "ga": 2, "r": "L", "pens": false, "aet": false, "p": 0.4724501941586557, "manager": "Fletcher"}, {"date": "2026-01-17", "opp": "Man City", "venue": "home", "comp": "Premier League", "gf": 2, "ga": 0, "r": "W", "pens": false, "aet": false, "p": 0.2084837255939166, "manager": "Carrick"}, {"date": "2026-01-25", "opp": "Arsenal", "venue": "away", "comp": "Premier League", "gf": 3, "ga": 2, "r": "W", "pens": false, "aet": false, "p": 0.0786341801842813, "manager": "Carrick"}, {"date": "2026-02-01", "opp": "Fulham", "venue": "home", "comp": "Premier League", "gf": 3, "ga": 2, "r": "W", "pens": false, "aet": false, "p": 0.4998431163768797, "manager": "Carrick"}, {"date": "2026-02-07", "opp": "Tottenham", "venue": "home", "comp": "Premier League", "gf": 2, "ga": 0, "r": "W", "pens": false, "aet": false, "p": 0.4860015696220833, "manager": "Carrick"}, {"date": "2026-02-10", "opp": "West Ham", "venue": "away", "comp": "Premier League", "gf": 1, "ga": 1, "r": "D", "pens": false, "aet": false, "p": 0.4660157724437624, "manager": "Carrick"}, {"date": "2026-02-23", "opp": "Everton", "venue": "away", "comp": "Premier League", "gf": 1, "ga": 0, "r": "W", "pens": false, "aet": false, "p": 0.4036590155759116, "manager": "Carrick"}, {"date": "2026-03-01", "opp": "Crystal Palace", "venue": "home", "comp": "Premier League", "gf": 2, "ga": 1, "r": "W", "pens": false, "aet": false, "p": 0.5334426607911594, "manager": "Carrick"}, {"date": "2026-03-04", "opp": "Newcastle", "venue": "away", "comp": "Premier League", "gf": 1, "ga": 2, "r": "L", "pens": false, "aet": false, "p": 0.2777830486017206, "manager": "Carrick"}, {"date": "2026-03-15", "opp": "Aston Villa", "venue": "home", "comp": "Premier League", "gf": 3, "ga": 1, "r": "W", "pens": false, "aet": false, "p": 0.3904325493762012, "manager": "Carrick"}, {"date": "2026-03-20", "opp": "Bournemouth", "venue": "away", "comp": "Premier League", "gf": 2, "ga": 2, "r": "D", "pens": false, "aet": false, "p": 0.3738954410397286, "manager": "Carrick"}, {"date": "2026-04-13", "opp": "Leeds", "venue": "home", "comp": "Premier League", "gf": 1, "ga": 2, "r": "L", "pens": false, "aet": false, "p": 0.5819253390784046, "manager": "Carrick"}, {"date": "2026-04-18", "opp": "Chelsea", "venue": "away", "comp": "Premier League", "gf": 1, "ga": 0, "r": "W", "pens": false, "aet": false, "p": 0.2599256862801677, "manager": "Carrick"}, {"date": "2026-04-27", "opp": "Brentford", "venue": "home", "comp": "Premier League", "gf": 2, "ga": 1, "r": "W", "pens": false, "aet": false, "p": 0.4978936730361307, "manager": "Carrick"}, {"date": "2026-05-03", "opp": "Liverpool", "venue": "home", "comp": "Premier League", "gf": 3, "ga": 2, "r": "W", "pens": false, "aet": false, "p": 0.3924564851887297, "manager": "Carrick"}, {"date": "2026-05-09", "opp": "Sunderland", "venue": "away", "comp": "Premier League", "gf": 0, "ga": 0, "r": "D", "pens": false, "aet": false, "p": 0.5111851406374922, "manager": "Carrick"}, {"date": "2026-05-17", "opp": "Nott'm Forest", "venue": "home", "comp": "Premier League", "gf": 3, "ga": 2, "r": "W", "pens": false, "aet": false, "p": 0.4919817731751856, "manager": "Carrick"}, {"date": "2026-05-24", "opp": "Brighton", "venue": "away", "comp": "Premier League", "gf": 3, "ga": 0, "r": "W", "pens": false, "aet": false, "p": 0.3387121626776255, "manager": "Carrick"}, {"date": "2026-08-22", "opp": "Hull", "venue": "away", "comp": "Premier League", "gf": 0, "ga": 2, "r": "L", "pens": false, "aet": false, "p": 0.6170768875054516, "manager": "Carrick"}, {"date": "2026-08-30", "opp": "Ipswich", "venue": "home", "comp": "Premier League", "gf": 5, "ga": 2, "r": "W", "pens": false, "aet": false, "p": 0.6403408955178196, "manager": "Carrick"}, {"date": "2026-09-06", "opp": "Everton", "venue": "away", "comp": "Premier League", "gf": 2, "ga": 2, "r": "D", "pens": false, "aet": false, "p": 0.3879485851164691, "manager": "Carrick"}, {"date": "2026-09-10", "opp": "Sabah", "venue": "home", "comp": "Champions League", "gf": 4, "ga": 0, "r": "W", "pens": false, "aet": false, "p": 0.8183045585293187, "manager": "Carrick"}, {"date": "2026-09-13", "opp": "Man City", "venue": "home", "comp": "Premier League", "gf": 0, "ga": 1, "r": "L", "pens": false, "aet": false, "p": 0.2975320779008156, "manager": "Carrick"}, {"date": "2026-09-16", "opp": "Brighton", "venue": "home", "comp": "League Cup", "gf": 2, "ga": 3, "r": "L", "pens": false, "aet": false, "p": 0.5403434749338657, "manager": "Carrick"}, {"date": "2026-09-20", "opp": "Fulham", "venue": "away", "comp": "Premier League", "gf": 1, "ga": 1, "r": "D", "pens": false, "aet": false, "p": 0.3828190971973115, "manager": "Carrick"}, {"date": "2026-10-10", "opp": "Tottenham", "venue": "home", "comp": "Premier League", "gf": 1, "ga": 1, "r": "D", "pens": false, "aet": false, "p": 0.5630193288628261, "manager": "Carrick"}, {"date": "2026-10-13", "opp": "Atlético", "venue": "away", "comp": "Champions League", "gf": 0, "ga": 2, "r": "L", "pens": false, "aet": false, "p": 0.3091971289442592, "manager": "Carrick"}, {"date": "2026-10-18", "opp": "Leeds", "venue": "away", "comp": "Premier League", "gf": 1, "ga": 1, "r": "D", "pens": false, "aet": false, "p": 0.3495544163240277, "manager": "Carrick"}, {"date": "2026-10-21", "opp": "Como", "venue": "away", "comp": "Champions League", "gf": 1, "ga": 4, "r": "L", "pens": false, "aet": false, "p": 0.3035149076672791, "manager": "Carrick"}, {"date": "2026-10-25", "opp": "Bournemouth", "venue": "home", "comp": "Premier League", "gf": 0, "ga": 3, "r": "L", "pens": false, "aet": false, "p": 0.4152180225279662, "manager": "Carrick"}, {"date": "2026-10-31", "opp": "Chelsea", "venue": "away", "comp": "Premier League", "gf": 0, "ga": 2, "r": "L", "pens": false, "aet": false, "p": 0.2249371165844145, "manager": "Carrick"}, {"date": "2026-11-03", "opp": "Roma", "venue": "home", "comp": "Champions League", "gf": 3, "ga": 2, "r": "W", "pens": false, "aet": false, "p": 0.4120719446230176, "manager": "Carrick"}], "bars": [{"label": "Against weaker sides", "n": 43, "actual": 0.4186046511627907, "expected": 0.5484527927624592}, {"label": "Against similar sides", "n": 37, "actual": 0.3513513513513513, "expected": 0.3655880375271715}, {"label": "Against stronger sides", "n": 24, "actual": 0.5, "expected": 0.2374500041794905}, {"label": "Away", "n": 52, "actual": 0.25, "expected": 0.3223180830980479}, {"label": "At home", "n": 52, "actual": 0.5769230769230769, "expected": 0.5009324472403919}, {"label": "3 days' rest or fewer", "n": 28, "actual": 0.2857142857142857, "expected": 0.4401342037318168}, {"label": "4+ days' rest", "n": 76, "actual": 0.4605263157894737, "expected": 0.4011219720145789}], "endings": [{"date": "2024-11-24", "run": 2, "opp": "Ipswich", "venue": "away", "r": "D", "gf": 1, "ga": 1, "p": 0.5778785630605742}, {"date": "2024-12-04", "run": 2, "opp": "Arsenal", "venue": "away", "r": "L", "gf": 0, "ga": 2, "p": 0.1499031847387882}, {"date": "2024-12-19", "run": 2, "opp": "Tottenham", "venue": "away", "r": "L", "gf": 3, "ga": 4, "p": 0.3635884142804205}, {"date": "2025-02-02", "run": 3, "opp": "Crystal Palace", "venue": "home", "r": "L", "gf": 0, "ga": 2, "p": 0.522329365028243}, {"date": "2025-04-01", "run": 2, "opp": "Nott'm Forest", "venue": "away", "r": "L", "gf": 0, "ga": 1, "p": 0.2894530908374815}, {"date": "2025-11-01", "run": 3, "opp": "Nott'm Forest", "venue": "away", "r": "D", "gf": 2, "ga": 2, "p": 0.4073068542451729}, {"date": "2026-02-10", "run": 4, "opp": "West Ham", "venue": "away", "r": "D", "gf": 1, "ga": 1, "p": 0.4660157724437624}, {"date": "2026-03-04", "run": 2, "opp": "Newcastle", "venue": "away", "r": "L", "gf": 1, "ga": 2, "p": 0.2777830486017206}, {"date": "2026-05-09", "run": 3, "opp": "Sunderland", "venue": "away", "r": "D", "gf": 0, "ga": 0, "p": 0.5111851406374922}, {"date": "2026-08-22", "run": 2, "opp": "Hull", "venue": "away", "r": "L", "gf": 0, "ga": 2, "p": 0.6170768875054516}], "t": {"days": "762", "n": "104", "wins": "43", "exp_wins": "42.8", "no_run": "49%", "strong_a": "50%", "strong_e": "24%", "weak_a": "42%", "weak_e": "55%", "strong_clubs": "80", "away_draw_a": "40%", "away_draw_e": "25%", "rest_a": "29%", "rest_e": "44%", "shots_mu": "16.9", "shots_lg": "13.7", "xg_mu": "1.43", "xg_lg": "1.61", "xgs_mu": "0.085", "xgs_lg": "0.117", "q_n": "16", "xga_old": "1.29", "xga_new": "1.66", "xg_old": "1.71", "xg_new": "1.53", "games_new": "9", "cross_r": "-0.30", "cross_lag": "-0.02", "peak": "1736", "now": "1643", "city": "1836", "backtests": "680", "brier_model": "0.113", "brier_simple": "0.137", "brier_const": "0.180", "test_matches": "18,490"}, "calibration": [{"n": 1860, "x": 0.0703339505755789, "y": 0.0897849462365591}, {"n": 5004, "x": 0.1532521380013356, "y": 0.1608713029576338}, {"n": 6472, "x": 0.2512503137406907, "y": 0.253708281829419}, {"n": 7061, "x": 0.3504987834965173, "y": 0.3396119529811641}, {"n": 6535, "x": 0.4489619018016563, "y": 0.4552410099464422}, {"n": 4895, "x": 0.5472516071774779, "y": 0.5411644535240041}, {"n": 3120, "x": 0.6465812737101707, "y": 0.6625}, {"n": 1635, "x": 0.7423453554118166, "y": 0.7492354740061162}, {"n": 398, "x": 0.834728016729464, "y": 0.864321608040201}], "backtest": [{"n": 334, "x": 0.04251347305389222, "y": 0.038922155688622756}, {"n": 127, "x": 0.16106692913385828, "y": 0.18110236220472442}, {"n": 88, "x": 0.3165625, "y": 0.3522727272727273}, {"n": 65, "x": 0.4843923076923077, "y": 0.5692307692307692}, {"n": 42, "x": 0.7019523809523809, "y": 0.7857142857142857}, {"n": 24, "x": 0.8737499999999999, "y": 0.9583333333333334}], "models": [{"name": "Outcome frequencies", "all": 1.068065277082488, "pl": 1.0710038308545309, "acc": 0.4330909090909091, "chosen": false, "book": false}, {"name": "Elo", "all": 0.980689883195119, "pl": 0.988560055629209, "acc": 0.524, "chosen": false, "book": false}, {"name": "Elo + context", "all": 0.9738050262673432, "pl": 0.9897007858538036, "acc": 0.5265454545454545, "chosen": true, "book": false}, {"name": "Elo + context + form", "all": 0.9730049439433568, "pl": 0.9900518103190704, "acc": 0.5261818181818182, "chosen": false, "book": false}, {"name": "Gradient boosting", "all": 0.9732439304009708, "pl": 0.9915184714435996, "acc": 0.5290909090909091, "chosen": false, "book": false}, {"name": "Bet365 closing odds", "all": null, "pl": 0.9658126068944156, "acc": 0.5472727272727272, "chosen": false, "book": true}]};
+
+/* SIMULATION START */
+function rng32(seed) {
+  let a = seed >>> 0;
+  return function () {
+    a = (a + 0x6D2B79F5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/* The fitted model reduced to: score(class) = base + slope * eloDiff. Only the rating varies between simulations. */
+function prepare(f, model) {
+  const rest = f.is_home ? [f.rest_team, f.rest_opp] : [f.rest_opp, f.rest_team];
+  const x = [0, f.neutral, f.is_cup, f.is_europe, rest[0], rest[1]];
+  const base = [0, 0, 0], slope = [0, 0, 0];
+  for (let c = 0; c < 3; c++) {
+    let b = model.intercept[c];
+    for (let j = 1; j < x.length; j++) b += model.coef[c][j] * (x[j] - model.mean[j]) / model.scale[j];
+    b -= model.coef[c][0] * model.mean[0] / model.scale[0];
+    base[c] = b;
+    slope[c] = model.coef[c][0] / model.scale[0];
+  }
+  return { base, slope };
+}
+
+function matchProbs(prep, f, elo, weakRatio) {
+  const diff = f.is_home ? elo - f.opp_elo : f.opp_elo - elo;
+  const e0 = Math.exp(prep.base[0] + prep.slope[0] * diff);
+  const e1 = Math.exp(prep.base[1] + prep.slope[1] * diff);
+  const e2 = Math.exp(prep.base[2] + prep.slope[2] * diff);
+  const total = e0 + e1 + e2;
+  const home = e0 / total, draw = e1 / total, away = e2 / total;
+  let win = f.is_home ? home : away;
+  const loss = f.is_home ? away : home;
+  let d = draw;
+  if (weakRatio && elo - f.opp_elo > 50) { const cut = win * (1 - weakRatio); win -= cut; d += cut; }
+  return [win, d, loss];
+}
+
+function simulate(fixtures, opts, n) {
+  const rand = rng32(20261106);
+  const prep = fixtures.map(f => prepare(f, opts.model));
+  const counts = new Array(fixtures.length).fill(0);
+  const { k, home_adv, gbar } = opts.params;
+  const need = 5;
+  let done = 0;
+  for (let s = 0; s < n; s++) {
+    let elo = opts.elo, run = Math.min(opts.start, need - 1);
+    for (let i = 0; i < fixtures.length; i++) {
+      const f = fixtures[i];
+      const p = matchProbs(prep[i], f, elo, opts.weakRatio);
+      const u = rand();
+      const forced = opts.forced ? opts.forced[i] : null;
+      const result = forced || (u < p[0] ? "W" : u < p[0] + p[1] ? "D" : "L");
+      if (result === "W") {
+        run++;
+        if (run >= need) { counts[i]++; done++; break; }
+      } else run = 0;
+      if (opts.update) {
+        const adv = f.neutral ? 0 : (f.is_home ? home_adv : -home_adv);
+        const expected = 1 / (1 + Math.pow(10, -(elo - f.opp_elo + adv) / 400));
+        elo += k * gbar * ((result === "W" ? 1 : result === "D" ? 0.5 : 0) - expected);
+      }
+    }
+  }
+  return { counts: counts.map(c => c / n), total: done / n };
+}
+/* SIMULATION END */
+
+const SIMS = 20000;
+const $ = id => document.getElementById(id);
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const NS = "http://www.w3.org/2000/svg";
+const num = d => { const [y, m, dd] = d.split("-").map(Number); return Date.UTC(y, m - 1, dd); };
+const shortDate = d => { const [, m, dd] = d.split("-").map(Number); return dd + " " + MONTHS[m - 1]; };
+const fullDate = d => { const [y, m, dd] = d.split("-").map(Number); return dd + " " + MONTHS[m - 1] + " " + y; };
+const pct = (v, digits) => (v * 100).toFixed(digits) + "%";
+const smartPct = v => pct(v, v < 0.095 && v > 0 ? 1 : 0);
+
+function el(name, attrs, parent, text) {
+  const node = document.createElementNS(NS, name);
+  for (const k in attrs) node.setAttribute(k, attrs[k]);
+  if (text !== undefined) node.textContent = text;
+  if (parent) parent.appendChild(node);
+  return node;
+}
+function html(tag, cls, text) {
+  const node = document.createElement(tag);
+  if (cls) node.className = cls;
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+function tip(host) {
+  let t = host.querySelector(".tip");
+  if (!t) { t = html("div", "tip"); t.hidden = true; host.appendChild(t); }
+  return {
+    show(lines, x, y) {
+      t.replaceChildren();
+      lines.forEach((line, i) => t.appendChild(html(i === 0 ? "b" : "span", "", line)));
+      t.hidden = false;
+      const w = host.clientWidth, tw = t.offsetWidth, th = t.offsetHeight;
+      t.style.left = Math.max(0, Math.min(w - tw, x - tw / 2)) + "px";
+      t.style.top = Math.max(-th, y - th - 12) + "px";
+    },
+    hide() { t.hidden = true; }
+  };
+}
+function fillTable(host, heads, rows) {
+  const table = document.createElement("table");
+  const headRow = table.createTHead().insertRow();
+  heads.forEach(h => { const th = document.createElement("th"); th.textContent = h; headRow.appendChild(th); });
+  const body = table.createTBody();
+  rows.forEach(r => { const tr = body.insertRow(); r.forEach(c => { tr.insertCell().textContent = c; }); });
+  host.replaceChildren(table);
+}
+
+document.querySelectorAll("[data-t]").forEach(n => { n.textContent = D.t[n.dataset.t]; });
+
+/* ---- Challenge strip ---- */
+function resultText(m) {
+  return m.gf + "-" + m.ga + (m.pens ? " (pens)" : m.aet ? " (aet)" : "");
+}
+function drawStrip() {
+  const host = $("strip");
+  host.querySelector("svg")?.remove();
+  const width = host.clientWidth, height = 118, mid = 58, amp = 28, n = D.strip.length;
+  const svg = el("svg", { viewBox: `0 0 ${width} ${height}`, height });
+  host.prepend(svg);
+  const step = width / n, bw = Math.max(step - 2, 1.5);
+  el("line", { x1: 0, x2: width, y1: mid, y2: mid, stroke: "var(--line-strong)", "stroke-width": 1 }, svg);
+
+  let bestEnd = 0, run = 0, best = 0;
+  D.strip.forEach((m, i) => { run = m.r === "W" ? run + 1 : 0; if (run > best) { best = run; bestEnd = i; } });
+  const bx = (bestEnd - best + 1) * step, bx2 = (bestEnd + 1) * step;
+  el("path", { d: `M${bx} 22V17H${bx2 - 2}V22`, fill: "none", stroke: "var(--ink-2)", "stroke-width": 1 }, svg);
+  const labelAnchor = bx2 > width - 200 ? "end" : "start";
+  el("text", { x: labelAnchor === "end" ? bx2 - 2 : bx, y: 11, "text-anchor": labelAnchor, class: "strong" }, svg, "4 in a row, then a draw at West Ham");
+
+  const marks = D.strip.map((m, i) => {
+    const x = i * step + (step - bw) / 2;
+    const r = Math.min(2, bw / 2);
+    if (m.r === "W") return el("path", { d: `M${x} ${mid - 1}V${mid - amp + r}Q${x} ${mid - amp} ${x + r} ${mid - amp}H${x + bw - r}Q${x + bw} ${mid - amp} ${x + bw} ${mid - amp + r}V${mid - 1}Z`, fill: "var(--win)" }, svg);
+    if (m.r === "L") return el("path", { d: `M${x} ${mid + 1}V${mid + amp - r}Q${x} ${mid + amp} ${x + r} ${mid + amp}H${x + bw - r}Q${x + bw} ${mid + amp} ${x + bw} ${mid + amp - r}V${mid + 1}Z`, fill: "var(--loss)" }, svg);
+    return el("rect", { x, y: mid - 4, width: bw, height: 8, rx: r, fill: "var(--draw)" }, svg);
+  });
+
+  let start = 0;
+  const spells = [];
+  D.strip.forEach((m, i) => { if (i === n - 1 || D.strip[i + 1].manager !== m.manager) { spells.push([m.manager, start, i]); start = i + 1; } });
+  spells.forEach(([name, a, b]) => {
+    const x1 = a * step, x2 = (b + 1) * step;
+    el("line", { x1: x1 + 1, x2: x2 - 1, y1: 97, y2: 97, stroke: "var(--line-strong)", "stroke-width": 1 }, svg);
+    if (x2 - x1 > name.length * 7 + 4) el("text", { x: (x1 + x2) / 2, y: 112, "text-anchor": "middle" }, svg, name);
+  });
+
+  const t = tip(host);
+  let current = -1;
+  const select = i => {
+    if (i === current) return;
+    current = i;
+    if (i < 0) { t.hide(); marks.forEach(m => m.removeAttribute("opacity")); return; }
+    marks.forEach((m, j) => { if (j !== i) m.setAttribute("opacity", ".35"); else m.removeAttribute("opacity"); });
+    const m = D.strip[i];
+    const word = m.r === "W" ? "win" : m.r === "D" ? "draw" : "loss";
+    t.show([m.opp + " " + resultText(m), fullDate(m.date) + ", " + m.venue, m.comp + ", " + word,
+      (m.p === null ? "" : "Model before the match: " + pct(m.p, 0) + " to win"), "Manager: " + m.manager].filter(Boolean), (i + .5) * step, 28);
+  };
+  host.onpointermove = e => { const r = host.getBoundingClientRect(); select(Math.max(0, Math.min(n - 1, Math.floor((e.clientX - r.left) / step)))); };
+  host.onpointerleave = () => select(-1);
+  host.onblur = () => select(-1);
+  host.onkeydown = e => {
+    if (e.key === "ArrowRight" || e.key === "ArrowLeft") { e.preventDefault(); select(Math.max(0, Math.min(n - 1, (current < 0 ? n : current) + (e.key === "ArrowRight" ? 1 : -1)))); }
+  };
+}
+fillTable($("strip-table"), ["Date", "Opponent", "Venue", "Competition", "Score", "Model's win chance", "Manager"],
+  D.strip.map(m => [fullDate(m.date), m.opp, m.venue, m.comp, resultText(m), m.p === null ? "none" : pct(m.p, 0), m.manager]));
+
+/* ---- Calculator ---- */
+const state = { elo: Math.round(D.elo.now), weak: false, cups: false, update: true, forced: {}, showAll: false };
+const defaults = { elo: Math.round(D.elo.now) };
+const presets = [["Now", Math.round(D.elo.now)], ["Best form", Math.round(D.elo.peak)], ["City level", Math.round(D.elo.city)]];
+const key = f => f.date + "|" + f.label;
+const params = { k: D.elo.k, home_adv: D.elo.home_adv, gbar: D.elo.gbar };
+const options = over => Object.assign({ model: D.model, params, elo: D.elo.now, start: D.start_streak, update: true, weakRatio: 0, forced: null }, over);
+const base = simulate(D.fixtures, options({}), SIMS);
+const baseCurve = (() => { let c = 0; return D.fixtures.map((f, i) => ({ date: f.date, label: f.label, v: (c += base.counts[i]) })); })();
+let last = null;
+
+function currentFixtures() { return state.cups ? D.fixtures_cups : D.fixtures; }
+function usingElo() { return state.elo === defaults.elo ? D.elo.now : state.elo; }
+function isDefault() { return state.elo === defaults.elo && !state.weak && !state.cups && state.update && !Object.keys(state.forced).length; }
+
+function recompute() {
+  const fixtures = currentFixtures();
+  const forced = fixtures.map(f => state.forced[key(f)] || null);
+  const elo = usingElo();
+  const sim = simulate(fixtures, options({ elo, update: state.update, weakRatio: state.weak ? D.weak_ratio : 0, forced }), SIMS);
+  const staticProbs = fixtures.map(f => matchProbs(prepare(f, D.model), f, elo, state.weak ? D.weak_ratio : 0));
+  let cumulative = 0;
+  const curve = fixtures.map((f, i) => ({ date: f.date, label: f.label, v: (cumulative += sim.counts[i]) }));
+  last = { fixtures, sim, staticProbs, curve, forced, elo };
+  render();
+}
+
+function currentRun(fixtures, forced) {
+  let run = D.start_streak, doneAt = -1;
+  for (let i = 0; i < fixtures.length; i++) {
+    if (!forced[i]) break;
+    run = forced[i] === "W" ? run + 1 : 0;
+    if (run >= 5) { doneAt = i; break; }
+  }
+  return { run: Math.min(run, 5), doneAt };
+}
+
+function render() {
+  const { fixtures, sim, staticProbs, forced } = last;
+  const { run, doneAt } = currentRun(fixtures, forced);
+  const done = doneAt >= 0;
+  $("pole-fill").style.height = (run * 20) + "%";
+  $("big").textContent = done ? "100%" : smartPct(sim.total);
+  const lastDate = fixtures[fixtures.length - 1].date;
+  const oneIn = sim.total > 0 ? Math.round(1 / sim.total) : null;
+  $("big-sub").textContent = done
+    ? "Haircut on " + fullDate(fixtures[doneAt].date) + ". Fifth win: " + fixtures[doneAt].label + "."
+    : "chance of a haircut by " + fullDate(lastDate) + (oneIn && oneIn > 1 && sim.total < .6 ? ", about 1 in " + oneIn : "");
+  $("delta").textContent = isDefault() ? "base forecast" : "base forecast: " + smartPct(base.total);
+  const streak = $("streak");
+  streak.replaceChildren("Run including your results: ", html("b", "", run + " of 5"));
+
+  $("elo").value = state.elo;
+  $("elo-out").textContent = state.elo;
+  const meanWin = staticProbs.reduce((s, p) => s + p[0], 0) / staticProbs.length;
+  $("mean-win").textContent = "Average chance of a win in the remaining matches: " + pct(meanWin, 0);
+  document.querySelectorAll("#presets .chip").forEach(c => c.setAttribute("aria-pressed", String(Number(c.dataset.elo) === state.elo)));
+  $("weak").checked = state.weak; $("cups").checked = state.cups; $("update").checked = state.update;
+  $("live").textContent = done ? "haircut on " + shortDate(fixtures[doneAt].date) : "chance " + smartPct(sim.total) + " · run " + run + " of 5";
+
+  drawCurve();
+  renderWindow();
+  renderFixtures();
+}
+
+function renderWindow() {
+  const { fixtures, staticProbs, forced } = last;
+  let best = null;
+  for (let i = 0; i + 5 <= fixtures.length; i++) {
+    let p = 1;
+    for (let j = i; j < i + 5; j++) p *= forced[j] ? (forced[j] === "W" ? 1 : 0) : staticProbs[j][0];
+    if (!best || p > best.p) best = { i, p };
+  }
+  const names = fixtures.slice(best.i, best.i + 5).map(f => f.label).join(", ");
+  $("window").replaceChildren(
+    "Best window of five straight matches: ",
+    html("b", "", shortDate(fixtures[best.i].date) + " to " + shortDate(fixtures[best.i + 4].date)),
+    " (" + names + "). Chance of winning all five at the current rating: ",
+    html("b", "", pct(best.p, best.p < .095 ? 1 : 0)),
+    ".");
+}
+
+function renderFixtures() {
+  const { fixtures, sim, staticProbs, forced } = last;
+  const host = $("fixtures");
+  host.replaceChildren();
+  let forcedEnd = 0;
+  while (forcedEnd < fixtures.length && forced[forcedEnd]) forcedEnd++;
+  const limit = state.showAll ? fixtures.length : Math.max(8, forcedEnd + 2);
+  fixtures.slice(0, limit).forEach((f, i) => {
+    const row = html("div", "fixture");
+    row.appendChild(html("span", "date", shortDate(f.date)));
+    const opp = html("div", "opp", f.label);
+    opp.appendChild(html("small", "", (f.is_home ? "home" : "away") + " · " + f.comp));
+    row.appendChild(opp);
+    const cell = html("div", "bar-cell");
+    const seg = html("div", "seg");
+    const p = staticProbs[i];
+    [["var(--win)", p[0]], ["var(--draw)", p[1]], ["var(--loss)", p[2]]].forEach(([color, v]) => {
+      const part = document.createElement("i");
+      part.style.background = color;
+      part.style.flex = v + " 0 0";
+      seg.appendChild(part);
+    });
+    cell.appendChild(seg);
+    cell.appendChild(html("div", "pw", "W " + pct(p[0], 0) + " · D " + pct(p[1], 0) + " · L " + pct(p[2], 0)));
+    row.appendChild(cell);
+    row.appendChild(html("span", "end", sim.counts[i] > 0 ? pct(sim.counts[i], 1) : "0%"));
+    const group = html("div", "whatif");
+    group.setAttribute("role", "group");
+    group.setAttribute("aria-label", "Result against " + f.label);
+    [["W", "win"], ["D", "draw"], ["L", "loss"]].forEach(([r, word]) => {
+      const b = html("button", "", r);
+      b.type = "button";
+      b.dataset.r = r;
+      b.setAttribute("aria-label", word);
+      b.setAttribute("aria-pressed", String(forced[i] === r));
+      b.addEventListener("click", () => {
+        const k = key(f);
+        if (state.forced[k] === r) delete state.forced[k]; else state.forced[k] = r;
+        recompute();
+      });
+      group.appendChild(b);
+    });
+    row.appendChild(group);
+    host.appendChild(row);
+  });
+  $("more").textContent = state.showAll ? "Show fewer" : "Show all " + fixtures.length + " matches";
+}
+
+function niceMax(v) {
+  // Each maximum divides into four clean ticks.
+  const steps = [.02, .04, .08, .12, .16, .2, .4, .6, .8, 1];
+  return steps.find(s => v <= s * .98) || 1;
+}
+function stepPath(points, x, y, x0) {
+  let d = `M${x0} ${y(0)}`;
+  points.forEach(p => { d += `H${x(p.date)}V${y(p.v)}`; });
+  return d;
+}
+function drawCurve() {
+  const host = $("curve");
+  host.querySelector("svg")?.remove();
+  const { curve, fixtures } = last;
+  const showBase = !isDefault();
+  $("curve-legend").hidden = !showBase;
+  const width = host.clientWidth, height = 268, pad = { l: 40, r: 58, t: 14, b: 26 };
+  const svg = el("svg", { viewBox: `0 0 ${width} ${height}`, height });
+  host.prepend(svg);
+  const t0 = num(D.snapshot), t1 = num(fixtures[fixtures.length - 1].date);
+  const maxV = niceMax(Math.max(curve[curve.length - 1].v, showBase ? baseCurve[baseCurve.length - 1].v : 0));
+  const x = d => pad.l + (num(d) - t0) / (t1 - t0) * (width - pad.l - pad.r);
+  const y = v => height - pad.b - v / maxV * (height - pad.t - pad.b);
+  for (let i = 0; i <= 4; i++) {
+    const v = maxV * i / 4, yy = y(v);
+    el("line", { x1: pad.l, x2: width - pad.r, y1: yy, y2: yy, stroke: "var(--line)", "stroke-width": 1 }, svg);
+    el("text", { x: pad.l - 7, y: yy + 4, "text-anchor": "end" }, svg, (v * 100).toFixed(maxV < .04 ? 1 : 0) + "%");
+  }
+  const stepMonths = width > 620 ? 1 : 2;
+  const startDate = new Date(t0);
+  for (let m = startDate.getUTCMonth() + 1, yr = startDate.getUTCFullYear(), c = 0; ; m++, c++) {
+    const time = Date.UTC(yr, m, 1);
+    if (time > t1) break;
+    if (c % stepMonths) continue;
+    const xx = pad.l + (time - t0) / (t1 - t0) * (width - pad.l - pad.r);
+    el("line", { x1: xx, x2: xx, y1: height - pad.b, y2: height - pad.b + 4, stroke: "var(--line-strong)", "stroke-width": 1 }, svg);
+    el("text", { x: xx, y: height - 8, "text-anchor": "middle" }, svg, MONTHS[new Date(time).getUTCMonth()]);
+  }
+  if (showBase) el("path", { d: stepPath(baseCurve, x, y, pad.l), fill: "none", stroke: "var(--draw)", "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }, svg);
+  const lastPoint = curve[curve.length - 1];
+  const line = stepPath(curve, x, y, pad.l);
+  el("path", { d: line + `V${y(0)}Z`, fill: "var(--win)", "fill-opacity": .1 }, svg);
+  el("path", { d: line, fill: "none", stroke: "var(--win)", "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }, svg);
+  el("circle", { cx: x(lastPoint.date), cy: y(lastPoint.v), r: 5, fill: "var(--win)", stroke: "var(--surface)", "stroke-width": 2 }, svg);
+  el("text", { x: x(lastPoint.date) + 9, y: y(lastPoint.v) + 4, class: "strong" }, svg, smartPct(lastPoint.v));
+  if (showBase) {
+    const b = baseCurve[baseCurve.length - 1];
+    if (Math.abs(y(b.v) - y(lastPoint.v)) > 15) el("text", { x: x(b.date) + 9, y: y(b.v) + 4 }, svg, smartPct(b.v));
+  }
+  const hair = el("line", { y1: pad.t, y2: height - pad.b, stroke: "var(--ink-3)", "stroke-width": 1, visibility: "hidden" }, svg);
+  const t = tip(host);
+  let index = -1;
+  const select = i => {
+    index = i;
+    if (i < 0) { hair.setAttribute("visibility", "hidden"); t.hide(); return; }
+    const p = curve[i], xx = x(p.date);
+    hair.setAttribute("x1", xx); hair.setAttribute("x2", xx); hair.setAttribute("visibility", "visible");
+    const lines = [smartPct(p.v) + " by " + fullDate(p.date), "Match: " + p.label];
+    if (showBase) {
+      const earlier = baseCurve.filter(b => b.date <= p.date);
+      lines.push("Base forecast: " + smartPct(earlier.length ? earlier[earlier.length - 1].v : 0));
+    }
+    t.show(lines, xx, 40);
+  };
+  host.onpointermove = e => {
+    const r = host.getBoundingClientRect(), px = e.clientX - r.left;
+    let bestI = 0, bestD = Infinity;
+    curve.forEach((p, i) => { const dist = Math.abs(x(p.date) - px); if (dist < bestD) { bestD = dist; bestI = i; } });
+    select(bestI);
+  };
+  host.onpointerleave = () => select(-1);
+  host.onblur = () => select(-1);
+  host.onkeydown = e => {
+    if (e.key === "ArrowRight" || e.key === "ArrowLeft") { e.preventDefault(); select(Math.max(0, Math.min(curve.length - 1, (index < 0 ? 0 : index) + (e.key === "ArrowRight" ? 1 : -1)))); }
+  };
+}
+
+/* ---- Evidence charts ---- */
+function drawBars() {
+  const host = $("bars");
+  host.querySelector("svg")?.remove();
+  const width = host.clientWidth, rowH = 38, pad = { l: 142, r: 42, t: 6, b: 24 };
+  const height = pad.t + pad.b + rowH * D.bars.length;
+  const svg = el("svg", { viewBox: `0 0 ${width} ${height}`, height });
+  host.prepend(svg);
+  const x = v => pad.l + v / .7 * (width - pad.l - pad.r);
+  [0, .2, .4, .6].forEach(v => {
+    el("line", { x1: x(v), x2: x(v), y1: pad.t, y2: height - pad.b, stroke: "var(--line)", "stroke-width": 1 }, svg);
+    el("text", { x: x(v), y: height - 7, "text-anchor": "middle" }, svg, Math.round(v * 100) + "%");
+  });
+  const t = tip(host);
+  D.bars.forEach((b, i) => {
+    const y = pad.t + rowH * i + rowH / 2;
+    el("text", { x: 0, y: y - 1, class: "strong" }, svg, b.label);
+    el("text", { x: 0, y: y + 13 }, svg, b.n + " matches");
+    el("line", { x1: x(b.expected), x2: x(b.actual), y1: y, y2: y, stroke: "var(--line-strong)", "stroke-width": 2 }, svg);
+    el("circle", { cx: x(b.expected), cy: y, r: 5, fill: "var(--draw)", stroke: "var(--surface)", "stroke-width": 2 }, svg);
+    el("circle", { cx: x(b.actual), cy: y, r: 6, fill: "var(--win)", stroke: "var(--surface)", "stroke-width": 2 }, svg);
+    const right = b.actual >= b.expected;
+    el("text", { x: x(b.actual) + (right ? 11 : -11), y: y + 4, "text-anchor": right ? "start" : "end", class: "strong" }, svg, pct(b.actual, 0));
+    const hit = el("rect", { x: 0, y: y - rowH / 2, width, height: rowH, fill: "transparent" }, svg);
+    hit.addEventListener("pointermove", () => t.show([pct(b.actual, 0) + " wins, expected " + pct(b.expected, 0), b.label + ", " + b.n + " matches"], x(b.actual), y - 6));
+    hit.addEventListener("pointerleave", () => t.hide());
+  });
+}
+function scatter(hostId, points) {
+  const host = $(hostId);
+  host.querySelector("svg")?.remove();
+  const width = host.clientWidth, height = Math.min(290, width * .78), pad = { l: 38, r: 10, t: 8, b: 40 };
+  const svg = el("svg", { viewBox: `0 0 ${width} ${height}`, height });
+  host.prepend(svg);
+  const x = v => pad.l + v * (width - pad.l - pad.r);
+  const y = v => height - pad.b - v * (height - pad.t - pad.b);
+  [0, .25, .5, .75, 1].forEach(v => {
+    el("line", { x1: pad.l, x2: width - pad.r, y1: y(v), y2: y(v), stroke: "var(--line)", "stroke-width": 1 }, svg);
+    el("text", { x: pad.l - 7, y: y(v) + 4, "text-anchor": "end" }, svg, (v * 100) + "%");
+    el("text", { x: x(v), y: height - 22, "text-anchor": "middle" }, svg, (v * 100) + "%");
+  });
+  el("text", { x: (pad.l + width - pad.r) / 2, y: height - 4, "text-anchor": "middle" }, svg, "what the model promised");
+  el("text", { x: pad.l + 4, y: pad.t + 11 }, svg, "what happened");
+  el("line", { x1: x(0), y1: y(0), x2: x(1), y2: y(1), stroke: "var(--line-strong)", "stroke-width": 1 }, svg);
+  const t = tip(host);
+  points.forEach(p => {
+    el("circle", { cx: x(p.x), cy: y(p.y), r: 5, fill: "var(--win)", stroke: "var(--surface)", "stroke-width": 2 }, svg);
+    const hit = el("circle", { cx: x(p.x), cy: y(p.y), r: 14, fill: "transparent" }, svg);
+    hit.addEventListener("pointermove", () => t.show([pct(p.y, 1) + " happened", "promised " + pct(p.x, 1) + ", " + p.n.toLocaleString("en-US") + " cases"], x(p.x), y(p.y)));
+    hit.addEventListener("pointerleave", () => t.hide());
+  });
+}
+function endings() {
+  const host = $("endings");
+  D.endings.forEach(e => {
+    const row = html("div", "ending");
+    row.appendChild(html("span", "muted", fullDate(e.date)));
+    const main = html("div");
+    main.appendChild(html("span", "", e.opp + " " + e.gf + "-" + e.ga));
+    main.appendChild(html("div", "muted", e.venue + " · run of " + e.run + " · " + pct(e.p, 0) + " to win"));
+    row.appendChild(main);
+    const tag = html("span", "tag");
+    const dot = document.createElement("i");
+    dot.style.background = e.r === "D" ? "var(--draw)" : "var(--loss)";
+    tag.appendChild(dot);
+    tag.append(e.r === "D" ? "draw" : "loss");
+    row.appendChild(tag);
+    host.appendChild(row);
+  });
+  const away = D.endings.filter(e => e.venue === "away").length;
+  $("endings-note").textContent = away + " of " + D.endings.length + " runs ended away from home. The longest ended with a draw at West Ham.";
+}
+function models() {
+  const table = document.createElement("table");
+  const head = table.createTHead().insertRow();
+  ["Model", "Log loss, all competitions", "Log loss, Premier League", "Accuracy, Premier League"].forEach(h => { const th = document.createElement("th"); th.textContent = h; head.appendChild(th); });
+  const body = table.createTBody();
+  const number = v => v === null ? "no data" : v.toFixed(3);
+  D.models.forEach(m => {
+    const tr = body.insertRow();
+    if (m.chosen) tr.className = "model-row-chosen";
+    if (m.book) tr.className = "model-row-book";
+    tr.insertCell().textContent = m.name + (m.chosen ? " (chosen)" : "");
+    tr.insertCell().textContent = number(m.all);
+    tr.insertCell().textContent = number(m.pl);
+    tr.insertCell().textContent = pct(m.acc, 1);
+  });
+  $("models").replaceChildren(table);
+}
+function peakAndHalf() {
+  const at = e => simulate(D.fixtures, options({ elo: e }), SIMS).total;
+  $("at-peak").textContent = pct(at(D.elo.peak), 0);
+  let low = D.elo.now, high = 2100;
+  for (let i = 0; i < 9; i++) { const mid = (low + high) / 2; if (at(mid) < .5) low = mid; else high = mid; }
+  $("for-half").textContent = String(Math.round(high / 10) * 10);
+}
+
+/* ---- Wiring ---- */
+presets.forEach(([label, value]) => {
+  const chip = html("button", "chip", label + " " + value);
+  chip.type = "button";
+  chip.dataset.elo = value;
+  chip.addEventListener("click", () => { state.elo = value; recompute(); });
+  $("presets").appendChild(chip);
+});
+let pending = 0;
+$("elo").addEventListener("input", e => {
+  state.elo = Number(e.target.value);
+  cancelAnimationFrame(pending);
+  pending = requestAnimationFrame(recompute);
+});
+$("weak").addEventListener("change", e => { state.weak = e.target.checked; recompute(); });
+$("cups").addEventListener("change", e => { state.cups = e.target.checked; recompute(); });
+$("update").addEventListener("change", e => { state.update = e.target.checked; recompute(); });
+$("reset").addEventListener("click", () => {
+  Object.assign(state, { elo: defaults.elo, weak: false, cups: false, update: true, forced: {} });
+  recompute();
+});
+$("more").addEventListener("click", () => { state.showAll = !state.showAll; renderFixtures(); });
+$("weak-note").textContent = "Against weaker sides United win only " + pct(D.weak_ratio, 0) + " of what the model expects. This applies that to future matches.";
+
+function redraw() {
+  drawStrip();
+  drawBars();
+  scatter("calib", D.calibration);
+  scatter("backtest", D.backtest);
+  if (last) drawCurve();
+}
+fillTable($("calib-table"), ["Promised", "Happened", "Cases"], D.calibration.map(p => [pct(p.x, 1), pct(p.y, 1), p.n.toLocaleString("en-US")]));
+fillTable($("backtest-table"), ["Promised", "Happened", "Team-seasons"], D.backtest.map(p => [pct(p.x, 1), pct(p.y, 1), p.n]));
+endings();
+models();
+peakAndHalf();
+recompute();
+redraw();
+let resizeTimer = 0;
+new ResizeObserver(() => { clearTimeout(resizeTimer); resizeTimer = setTimeout(redraw, 120); }).observe(document.querySelector(".wrap"));
+</script>
+
+</body>
+</html>

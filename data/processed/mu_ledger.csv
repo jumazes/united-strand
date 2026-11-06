@@ -1,0 +1,105 @@
+game_id,date,kickoff,competition_id,comp_group,home_id,away_id,home_name,away_name,home_goals,away_goals,neutral,source,completed,status,gf,ga,result
+espn_704347,2024-10-06,2024-10-06T13:00Z,GB1,league,405,985,Aston Villa,Manchester United,0,0,0,espn,True,FT,0,0,D
+espn_704352,2024-10-19,2024-10-19T14:00Z,GB1,league,985,1148,Manchester United,Brentford,2,1,0,espn,True,FT,2,1,W
+espn_720561,2024-10-24,2024-10-24T19:00Z,EL,europe,36,985,Fenerbahce,Manchester United,1,1,0,espn,True,FT,1,1,D
+espn_704366,2024-10-27,2024-10-27T14:00Z,GB1,league,379,985,West Ham United,Manchester United,2,1,0,espn,True,FT,1,2,L
+espn_721581,2024-10-30,2024-10-30T19:45Z,CGB,domestic_cup,985,1003,Manchester United,Leicester City,5,2,0,espn,True,FT,5,2,W
+espn_704378,2024-11-03,2024-11-03T16:30Z,GB1,league,985,631,Manchester United,Chelsea,1,1,0,espn,True,FT,1,1,D
+espn_720575,2024-11-07,2024-11-07T20:00Z,EL,europe,985,espn_605,Manchester United,PAOK,2,0,0,espn,True,FT,2,0,W
+espn_704386,2024-11-10,2024-11-10T14:00Z,GB1,league,985,1003,Manchester United,Leicester City,3,0,0,espn,True,FT,3,0,W
+espn_704389,2024-11-24,2024-11-24T16:30Z,GB1,league,677,985,Ipswich Town,Manchester United,1,1,0,espn,True,FT,1,1,D
+espn_720590,2024-11-28,2024-11-28T20:00Z,EL,europe,985,501,Manchester United,Bodo/Glimt,3,2,0,espn,True,FT,3,2,W
+espn_704407,2024-12-01,2024-12-01T13:30Z,GB1,league,985,29,Manchester United,Everton,4,0,0,espn,True,FT,4,0,W
+espn_704410,2024-12-04,2024-12-04T20:15Z,GB1,league,11,985,Arsenal,Manchester United,2,0,0,espn,True,FT,0,2,L
+espn_704419,2024-12-07,2024-12-07T17:30Z,GB1,league,985,703,Manchester United,Nottingham Forest,2,3,0,espn,True,FT,2,3,L
+espn_720607,2024-12-12,2024-12-12T17:45Z,EL,europe,941,985,Viktoria Plzen,Manchester United,1,2,0,espn,True,FT,2,1,W
+espn_704434,2024-12-15,2024-12-15T16:30Z,GB1,league,281,985,Manchester City,Manchester United,1,2,0,espn,True,FT,2,1,W
+espn_722972,2024-12-19,2024-12-19T20:00Z,CGB,domestic_cup,148,985,Tottenham Hotspur,Manchester United,4,3,0,espn,True,FT,3,4,L
+espn_704440,2024-12-22,2024-12-22T14:00Z,GB1,league,985,989,Manchester United,AFC Bournemouth,0,3,0,espn,True,FT,0,3,L
+espn_704455,2024-12-26,2024-12-26T17:30Z,GB1,league,543,985,Wolverhampton Wanderers,Manchester United,2,0,0,espn,True,FT,0,2,L
+espn_704468,2024-12-30,2024-12-30T20:00Z,GB1,league,985,762,Manchester United,Newcastle United,0,2,0,espn,True,FT,0,2,L
+espn_704475,2025-01-05,2025-01-05T16:30Z,GB1,league,31,985,Liverpool,Manchester United,2,2,0,espn,True,FT,2,2,D
+espn_724015,2025-01-12,2025-01-12T15:00Z,FAC,domestic_cup,11,985,Arsenal,Manchester United,1,1,0,espn,True,FT-Pens,1,1,D
+espn_704488,2025-01-16,2025-01-16T20:00Z,GB1,league,985,180,Manchester United,Southampton,3,1,0,espn,True,FT,3,1,W
+espn_704497,2025-01-19,2025-01-19T14:00Z,GB1,league,985,1237,Manchester United,Brighton & Hove Albion,1,3,0,espn,True,FT,1,3,L
+espn_720483,2025-01-23,2025-01-23T20:00Z,EL,europe,985,124,Manchester United,Rangers,2,1,0,espn,True,FT,2,1,W
+espn_704503,2025-01-26,2025-01-26T19:00Z,GB1,league,931,985,Fulham,Manchester United,0,1,0,espn,True,FT,1,0,W
+espn_720496,2025-01-30,2025-01-30T20:00Z,EL,europe,301,985,FCSB,Manchester United,0,2,0,espn,True,FT,2,0,W
+espn_704516,2025-02-02,2025-02-02T14:00Z,GB1,league,985,873,Manchester United,Crystal Palace,0,2,0,espn,True,FT,0,2,L
+espn_730040,2025-02-07,2025-02-07T20:00Z,FAC,domestic_cup,985,1003,Manchester United,Leicester City,2,1,0,espn,True,FT,2,1,W
+espn_704524,2025-02-16,2025-02-16T16:30Z,GB1,league,148,985,Tottenham Hotspur,Manchester United,1,0,0,espn,True,FT,0,1,L
+espn_704530,2025-02-22,2025-02-22T12:30Z,GB1,league,29,985,Everton,Manchester United,2,2,0,espn,True,FT,2,2,D
+espn_704546,2025-02-26,2025-02-26T19:30Z,GB1,league,985,677,Manchester United,Ipswich Town,3,2,0,espn,True,FT,3,2,W
+espn_732567,2025-03-02,2025-03-02T16:30Z,FAC,domestic_cup,985,931,Manchester United,Fulham,1,1,0,espn,True,FT-Pens,1,1,D
+espn_733625,2025-03-06,2025-03-06T17:45Z,EL,europe,681,985,Real Sociedad,Manchester United,1,1,0,espn,True,FT,1,1,D
+espn_704555,2025-03-09,2025-03-09T16:30Z,GB1,league,985,11,Manchester United,Arsenal,1,1,0,espn,True,FT,1,1,D
+espn_733635,2025-03-13,2025-03-13T20:00Z,EL,europe,985,681,Manchester United,Real Sociedad,4,1,0,espn,True,FT,4,1,W
+espn_704562,2025-03-16,2025-03-16T19:00Z,GB1,league,1003,985,Leicester City,Manchester United,0,3,0,espn,True,FT,3,0,W
+espn_704569,2025-04-01,2025-04-01T19:00Z,GB1,league,703,985,Nottingham Forest,Manchester United,1,0,0,espn,True,FT,0,1,L
+espn_704581,2025-04-06,2025-04-06T15:30Z,GB1,league,985,281,Manchester United,Manchester City,0,0,0,espn,True,FT,0,0,D
+espn_734500,2025-04-10,2025-04-10T19:00Z,EL,europe,1041,985,Lyon,Manchester United,2,2,0,espn,True,FT,2,2,D
+espn_704590,2025-04-13,2025-04-13T15:30Z,GB1,league,762,985,Newcastle United,Manchester United,4,1,0,espn,True,FT,1,4,L
+espn_734499,2025-04-17,2025-04-17T19:00Z,EL,europe,985,1041,Manchester United,Lyon,5,4,0,espn,True,AET,5,4,W
+espn_704600,2025-04-20,2025-04-20T13:00Z,GB1,league,985,543,Manchester United,Wolverhampton Wanderers,0,1,0,espn,True,FT,0,1,L
+espn_704609,2025-04-27,2025-04-27T13:00Z,GB1,league,989,985,AFC Bournemouth,Manchester United,1,1,0,espn,True,FT,1,1,D
+espn_733646,2025-05-01,2025-05-01T19:00Z,EL,europe,621,985,Athletic Club,Manchester United,0,3,0,espn,True,FT,3,0,W
+espn_704621,2025-05-04,2025-05-04T13:00Z,GB1,league,1148,985,Brentford,Manchester United,4,3,0,espn,True,FT,3,4,L
+espn_733648,2025-05-08,2025-05-08T19:00Z,EL,europe,985,621,Manchester United,Athletic Club,4,1,0,espn,True,FT,4,1,W
+espn_704633,2025-05-11,2025-05-11T13:15Z,GB1,league,985,379,Manchester United,West Ham United,0,2,0,espn,True,FT,0,2,L
+espn_704643,2025-05-16,2025-05-16T19:15Z,GB1,league,631,985,Chelsea,Manchester United,1,0,0,espn,True,FT,0,1,L
+espn_733649,2025-05-21,2025-05-21T19:00Z,EL,europe,148,985,Tottenham Hotspur,Manchester United,1,0,0,espn,True,FT,0,1,L
+espn_704658,2025-05-25,2025-05-25T15:00Z,GB1,league,985,405,Manchester United,Aston Villa,2,0,0,espn,True,FT,2,0,W
+espn_740604,2025-08-17,2025-08-17T15:30Z,GB1,league,985,11,Manchester United,Arsenal,0,1,0,espn,True,FT,0,1,L
+espn_740612,2025-08-24,2025-08-24T15:30Z,GB1,league,931,985,Fulham,Manchester United,1,1,0,espn,True,FT,1,1,D
+espn_756229,2025-08-27,2025-08-27T19:00Z,CGB,domestic_cup,1034,985,Grimsby Town,Manchester United,2,2,0,espn,True,FT-Pens,2,2,D
+espn_740621,2025-08-30,2025-08-30T14:00Z,GB1,league,985,1132,Manchester United,Burnley,3,2,0,espn,True,FT,3,2,W
+espn_740630,2025-09-14,2025-09-14T15:30Z,GB1,league,281,985,Manchester City,Manchester United,3,0,0,espn,True,FT,0,3,L
+espn_740645,2025-09-20,2025-09-20T16:30Z,GB1,league,985,631,Manchester United,Chelsea,2,1,0,espn,True,FT,2,1,W
+espn_740649,2025-09-27,2025-09-27T11:30Z,GB1,league,1148,985,Brentford,Manchester United,3,1,0,espn,True,FT,1,3,L
+espn_740663,2025-10-04,2025-10-04T14:00Z,GB1,league,985,289,Manchester United,Sunderland,2,0,0,espn,True,FT,2,0,W
+espn_740670,2025-10-19,2025-10-19T15:30Z,GB1,league,31,985,Liverpool,Manchester United,1,2,0,espn,True,FT,2,1,W
+espn_740683,2025-10-25,2025-10-25T16:30Z,GB1,league,985,1237,Manchester United,Brighton & Hove Albion,4,2,0,espn,True,FT,4,2,W
+espn_740692,2025-11-01,2025-11-01T15:00Z,GB1,league,703,985,Nottingham Forest,Manchester United,2,2,0,espn,True,FT,2,2,D
+espn_740705,2025-11-08,2025-11-08T12:30Z,GB1,league,148,985,Tottenham Hotspur,Manchester United,2,2,0,espn,True,FT,2,2,D
+espn_740711,2025-11-24,2025-11-24T20:00Z,GB1,league,985,29,Manchester United,Everton,0,1,0,espn,True,FT,0,1,L
+espn_740725,2025-11-30,2025-11-30T12:00Z,GB1,league,873,985,Crystal Palace,Manchester United,1,2,0,espn,True,FT,2,1,W
+espn_740735,2025-12-04,2025-12-04T20:00Z,GB1,league,985,379,Manchester United,West Ham United,1,1,0,espn,True,FT,1,1,D
+espn_740737,2025-12-08,2025-12-08T20:00Z,GB1,league,543,985,Wolverhampton Wanderers,Manchester United,1,4,0,espn,True,FT,4,1,W
+espn_740751,2025-12-15,2025-12-15T20:00Z,GB1,league,985,989,Manchester United,AFC Bournemouth,4,4,0,espn,True,FT,4,4,D
+espn_740765,2025-12-21,2025-12-21T16:30Z,GB1,league,405,985,Aston Villa,Manchester United,2,1,0,espn,True,FT,1,2,L
+espn_740769,2025-12-26,2025-12-26T20:00Z,GB1,league,985,762,Manchester United,Newcastle United,1,0,0,espn,True,FT,1,0,W
+espn_740782,2025-12-30,2025-12-30T20:15Z,GB1,league,985,543,Manchester United,Wolverhampton Wanderers,1,1,0,espn,True,FT,1,1,D
+espn_740791,2026-01-04,2026-01-04T12:30Z,GB1,league,399,985,Leeds United,Manchester United,1,1,0,espn,True,FT,1,1,D
+espn_740799,2026-01-07,2026-01-07T20:15Z,GB1,league,1132,985,Burnley,Manchester United,2,2,0,espn,True,FT,2,2,D
+espn_762498,2026-01-11,2026-01-11T16:30Z,FAC,domestic_cup,985,1237,Manchester United,Brighton & Hove Albion,1,2,0,espn,True,FT,1,2,L
+espn_740811,2026-01-17,2026-01-17T12:30Z,GB1,league,985,281,Manchester United,Manchester City,2,0,0,espn,True,FT,2,0,W
+espn_740816,2026-01-25,2026-01-25T16:30Z,GB1,league,11,985,Arsenal,Manchester United,2,3,0,espn,True,FT,3,2,W
+espn_740833,2026-02-01,2026-02-01T14:00Z,GB1,league,985,931,Manchester United,Fulham,3,2,0,espn,True,FT,3,2,W
+espn_740843,2026-02-07,2026-02-07T12:30Z,GB1,league,985,148,Manchester United,Tottenham Hotspur,2,0,0,espn,True,FT,2,0,W
+espn_740855,2026-02-10,2026-02-10T20:15Z,GB1,league,379,985,West Ham United,Manchester United,1,1,0,espn,True,FT,1,1,D
+espn_740856,2026-02-23,2026-02-23T20:00Z,GB1,league,29,985,Everton,Manchester United,0,1,0,espn,True,FT,1,0,W
+espn_740875,2026-03-01,2026-03-01T14:00Z,GB1,league,985,873,Manchester United,Crystal Palace,2,1,0,espn,True,FT,2,1,W
+espn_740883,2026-03-04,2026-03-04T20:15Z,GB1,league,762,985,Newcastle United,Manchester United,2,1,0,espn,True,FT,1,2,L
+espn_740892,2026-03-15,2026-03-15T14:00Z,GB1,league,985,405,Manchester United,Aston Villa,3,1,0,espn,True,FT,3,1,W
+espn_740897,2026-03-20,2026-03-20T20:00Z,GB1,league,989,985,AFC Bournemouth,Manchester United,2,2,0,espn,True,FT,2,2,D
+espn_740912,2026-04-13,2026-04-13T19:00Z,GB1,league,985,399,Manchester United,Leeds United,1,2,0,espn,True,FT,1,2,L
+espn_740922,2026-04-18,2026-04-18T19:00Z,GB1,league,631,985,Chelsea,Manchester United,0,1,0,espn,True,FT,1,0,W
+espn_740932,2026-04-27,2026-04-27T19:00Z,GB1,league,985,1148,Manchester United,Brentford,2,1,0,espn,True,FT,2,1,W
+espn_740943,2026-05-03,2026-05-03T14:30Z,GB1,league,985,31,Manchester United,Liverpool,3,2,0,espn,True,FT,3,2,W
+espn_740953,2026-05-09,2026-05-09T14:00Z,GB1,league,289,985,Sunderland,Manchester United,0,0,0,espn,True,FT,0,0,D
+espn_740963,2026-05-17,2026-05-17T11:30Z,GB1,league,985,703,Manchester United,Nottingham Forest,3,2,0,espn,True,FT,3,2,W
+espn_740966,2026-05-24,2026-05-24T15:00Z,GB1,league,1237,985,Brighton & Hove Albion,Manchester United,0,3,0,espn,True,FT,3,0,W
+espn_401879322,2026-08-22,2026-08-22T11:30Z,GB1,league,3008,985,Hull City,Manchester United,2,0,0,espn,True,FT,0,2,L
+espn_401879293,2026-08-30,2026-08-30T15:30Z,GB1,league,985,677,Manchester United,Ipswich Town,5,2,0,espn,True,FT,5,2,W
+espn_401879291,2026-09-06,2026-09-06T13:00Z,GB1,league,29,985,Everton,Manchester United,2,2,0,espn,True,FT,2,2,D
+espn_401915442,2026-09-10,2026-09-10T19:00Z,CL,europe,985,63993,Manchester United,Sabah FK,4,0,0,espn,True,FT,4,0,W
+espn_401879278,2026-09-13,2026-09-13T15:30Z,GB1,league,985,281,Manchester United,Manchester City,0,1,0,espn,True,FT,0,1,L
+espn_401914261,2026-09-16,2026-09-16T19:00Z,CGB,domestic_cup,985,1237,Manchester United,Brighton & Hove Albion,2,3,0,espn,True,FT,2,3,L
+espn_401878777,2026-09-20,2026-09-20T15:30Z,GB1,league,931,985,Fulham,Manchester United,1,1,0,espn,True,FT,1,1,D
+espn_401878773,2026-10-10,2026-10-10T16:30Z,GB1,league,985,148,Manchester United,Tottenham Hotspur,1,1,0,espn,True,FT,1,1,D
+espn_401915412,2026-10-13,2026-10-13T19:00Z,CL,europe,13,985,Atlético Madrid,Manchester United,2,0,0,espn,True,FT,0,2,L
+espn_401879260,2026-10-18,2026-10-18T13:00Z,GB1,league,399,985,Leeds United,Manchester United,1,1,0,espn,True,FT,1,1,D
+espn_401915395,2026-10-21,2026-10-21T16:45Z,CL,europe,1047,985,Como,Manchester United,4,1,0,espn,True,FT,1,4,L
+espn_401879252,2026-10-25,2026-10-25T14:00Z,GB1,league,985,989,Manchester United,AFC Bournemouth,0,3,0,espn,True,FT,0,3,L
+espn_401879248,2026-10-31,2026-10-31T12:30Z,GB1,league,631,985,Chelsea,Manchester United,2,0,0,espn,True,FT,0,2,L
+espn_401915308,2026-11-03,2026-11-03T20:00Z,CL,europe,985,12,Manchester United,AS Roma,3,2,0,espn,True,FT,3,2,W

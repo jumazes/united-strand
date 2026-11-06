@@ -1,0 +1,30 @@
+from,to,opponents,p_all_five
+2026-11-28,2026-12-13,"Brentford, Newcastle United, Coventry City, RB Leipzig, Crystal Palace",0.010323294858908863
+2027-04-10,2027-05-08,"Hull City, Ipswich Town, Crystal Palace, Coventry City, AFC Bournemouth",0.008955371947010456
+2027-04-17,2027-05-15,"Ipswich Town, Crystal Palace, Coventry City, AFC Bournemouth, Leeds United",0.007394589510937213
+2027-03-13,2027-04-24,"Everton, Manchester City, Hull City, Ipswich Town, Crystal Palace",0.005926279994432127
+2027-03-20,2027-05-01,"Manchester City, Hull City, Ipswich Town, Crystal Palace, Coventry City",0.005760263088108872
+2027-04-24,2027-05-23,"Crystal Palace, Coventry City, AFC Bournemouth, Leeds United, Tottenham Hotspur",0.005472649445333666
+2027-05-01,2027-05-30,"Coventry City, AFC Bournemouth, Leeds United, Tottenham Hotspur, Fulham",0.005408339402003091
+2026-11-25,2026-12-08,"Sporting CP, Brentford, Newcastle United, Coventry City, RB Leipzig",0.00536737095718825
+2026-12-27,2027-01-16,"Nottingham Forest, Sunderland, Brighton & Hove Albion, Newcastle United, Aston Villa",0.004786310982201738
+2027-03-03,2027-04-17,"Sunderland, Everton, Manchester City, Hull City, Ipswich Town",0.0045161924263753435
+2026-12-05,2026-12-27,"Coventry City, RB Leipzig, Crystal Palace, Arsenal, Nottingham Forest",0.003783268934817989
+2026-12-08,2026-12-30,"RB Leipzig, Crystal Palace, Arsenal, Nottingham Forest, Sunderland",0.003631511901388246
+2027-01-27,2027-02-20,"Villarreal, Brentford, Chelsea, Brighton & Hove Albion, Nottingham Forest",0.003158371459481443
+2027-02-10,2027-03-13,"Brighton & Hove Albion, Nottingham Forest, Arsenal, Sunderland, Everton",0.0030896698282578757
+2027-01-23,2027-02-10,"Liverpool, Villarreal, Brentford, Chelsea, Brighton & Hove Albion",0.0030225255321835276
+2027-02-06,2027-03-03,"Chelsea, Brighton & Hove Albion, Nottingham Forest, Arsenal, Sunderland",0.0027084647183571557
+2026-11-22,2026-12-05,"Liverpool, Sporting CP, Brentford, Newcastle United, Coventry City",0.002370017658752353
+2026-12-02,2026-12-20,"Newcastle United, Coventry City, RB Leipzig, Crystal Palace, Arsenal",0.002175841467507144
+2026-12-20,2027-01-07,"Arsenal, Nottingham Forest, Sunderland, Brighton & Hove Albion, Newcastle United",0.0019432380593110055
+2027-02-27,2027-04-10,"Arsenal, Sunderland, Everton, Manchester City, Hull City",0.0018486284570142246
+2027-01-30,2027-02-27,"Brentford, Chelsea, Brighton & Hove Albion, Nottingham Forest, Arsenal",0.0017966040975597208
+2027-01-07,2027-01-27,"Newcastle United, Aston Villa, Bayern Munich, Liverpool, Villarreal",0.0016657571065895405
+2026-12-30,2027-01-20,"Sunderland, Brighton & Hove Albion, Newcastle United, Aston Villa, Bayern Munich",0.0015556046534868282
+2027-01-20,2027-02-06,"Bayern Munich, Liverpool, Villarreal, Brentford, Chelsea",0.0015348108283568837
+2026-11-08,2026-12-02,"Aston Villa, Liverpool, Sporting CP, Brentford, Newcastle United",0.0014178756295422836
+2026-12-13,2027-01-02,"Crystal Palace, Arsenal, Nottingham Forest, Sunderland, Brighton & Hove Albion",0.001319025612283666
+2027-02-20,2027-03-20,"Nottingham Forest, Arsenal, Sunderland, Everton, Manchester City",0.0011268714174320258
+2027-01-02,2027-01-23,"Brighton & Hove Albion, Newcastle United, Aston Villa, Bayern Munich, Liverpool",0.0009256744202581373
+2027-01-16,2027-01-30,"Aston Villa, Bayern Munich, Liverpool, Villarreal, Brentford",0.0008888407384718127
